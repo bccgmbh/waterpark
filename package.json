@@ -1,0 +1,47 @@
+{
+  "name": "waterpark",
+  "version": "0.1.0",
+  "description": "Stream toolbox - In development, call signatures will change!",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && DEBUG=* tape tests/*/*.spec.js | tap-spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bccgmbh/waterpark.git"
+  },
+  "keywords": [
+    "stream",
+    "through",
+    "skip",
+    "take",
+    "reduce",
+    "average",
+    "range",
+    "interval",
+    "array",
+    "random",
+    "delay",
+    "multicore",
+    "concurrent",
+    "parallel",
+    "readable",
+    "writable",
+    "transrom"
+  ],
+  "author": "Blockchain Consulting GmbH",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bccgmbh/waterpark/issues"
+  },
+  "homepage": "https://github.com/bccgmbh/waterpark#readme",
+  "devDependencies": {
+    "debug": "^3.1.0",
+    "standard": "^11.0.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.9.0"
+  },
+  "dependencies": {
+    "parallel-transform": "^1.1.0"
+  }
+}
