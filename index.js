@@ -1,6 +1,7 @@
 module.exports = {
   // Reader
   ...require('./src/readable/array-reader'),
+  ...require('./src/readable/buffer-reader'),
   ...require('./src/readable/interval-reader'),
   ...require('./src/readable/random-reader'),
   ...require('./src/readable/range-reader'),
