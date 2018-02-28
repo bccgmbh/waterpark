@@ -9,10 +9,15 @@ While working with streams, these basic operations will ease your life.
 
 In `some-file.js`
 
-    const {range, skip, through, console}
+    const {range, skipObjects, reduceObjects, through} = require('waterpark')
+    
     range(1, 10)
-      .pipe(skip(3))
-      .pipe(through())
+      .pipe(skipObjects(4))
+      .pipe(reduceObjects({}, (sum, val) => sum + val, 0))
+      .pipe(through((data, encoding, cb) => {
+        console.log(data)
+        cb()
+      }))
 
 ## Reader
 
@@ -35,4 +40,4 @@ In `some-file.js`
 
 * drainObjects - (options) // object writer
 * drain - (options) // buffer writer
-* Console - (options)
+* console - (options)
