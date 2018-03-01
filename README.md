@@ -21,7 +21,7 @@ In `some-file.js`
 
 ## Reader
 
-* fromArray ( array, \[, options\] ) // object stream
+* [fromArray](# fromArray) ( array, \[, options\] ) // object stream
 * interval ( interval \[, options\] ) // object stream
 * random ( size, \[, options\] \[, options\] ) // buffer / object stream
 * range ( from, to, \[, options\] ) // object stream
@@ -29,6 +29,7 @@ In `some-file.js`
 ## Transformer
 * delay - (milliseconds, jitter, options) // object stream
 * delayBuffer - (milliseconds, jitter, options) // buffer stream
+* filter - (options, fn) // buffer / object stream
 * spliceObjects - (options, every, start, deleteCount, ...item) // Not yet implemented!
 * spliceBuffers - (options, every, start, deleteCount, buffer) // Not yet implemented!
 * skip - (amount, every, options) // object stream
@@ -41,3 +42,12 @@ In `some-file.js`
 * drainObjects - (options) // object writer
 * drain - (options) // buffer writer
 * console - (options)
+
+## Reader
+
+### fromArray
+
+creates a readable stream form an array.
+
+    fromArray( array, [, options] )
+

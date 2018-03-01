@@ -1,7 +1,7 @@
 const tape = require('tape')
 const {fromBuffer} = require('../../')
 
-tape.only('[BufferReader] reads bytes from buffer', t => {
+tape('[BufferReader] reads bytes from buffer', t => {
   const buf = Buffer.from('abc')
   t.plan(2)
   fromBuffer(buf)

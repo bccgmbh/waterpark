@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, skipObjects} = require('../../')
+const {range, skipObjects, skipBytes, fromBuffer} = require('../../')
 
 tape('[Skip] object stream', t => {
   const result = [4, 5]
@@ -29,6 +29,27 @@ tape('[Skip] nothing', t => {
     .pipe(skipObjects(0))
     .on('data', data => {
       t.equal(data, result.shift(), `object ${data} passed`)
+    })
+    .on('end', () => t.ok(true, 'Skip object stream should end'))
+})
+
+tape('[Skip] buffer stream', t => {
+  t.plan(2)
+  fromBuffer(Buffer.from('abcdef'))
+    .pipe(skipBytes(3))
+    .on('data', data => {
+      t.equal(data.toString(), 'def', `3 bytes skipped`)
+    })
+    .on('end', () => t.ok(true, 'Skip object stream should end'))
+})
+
+tape('[Skip] buffer stream with low water mark', t => {
+  const results = ['d', 'ef']
+  t.plan(3)
+  fromBuffer(Buffer.from('abcdef'), {highWaterMark: 2})
+    .pipe(skipBytes(3))
+    .on('data', data => {
+      t.equal(data.toString(), results.shift(), `3 bytes skipped`)
     })
     .on('end', () => t.ok(true, 'Skip object stream should end'))
 })

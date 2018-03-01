@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, reduceObjects} = require('../../')
+const {range, fromBuffer, reduceObjects, reduceBytes} = require('../../')
 
 tape('[Reduce] object stream', t => {
   t.plan(2) // 2 = 1 x reduce + 1 x END
@@ -29,6 +29,16 @@ tape('[Reduce] segmented object stream with remainder', t => {
     .pipe(reduceObjects({}, (acc, val) => acc + val, 0, 3))
     .on('data', data => {
       t.equal(data, result.shift(), `reduced object ${data} passed`)
+    })
+    .on('end', () => t.ok(true, 'Reduce object stream should end'))
+})
+
+tape.skip('[Reduce] buffer stream', t => {
+  t.plan(2) // 2 = 1 x reduce + 1 x END
+  fromBuffer(1, 6)
+    .pipe(reduceBytes({}, (acc, val) => acc + val))
+    .on('data', data => {
+      t.equal(data, 21, `reduced object ${data} passed`)
     })
     .on('end', () => t.ok(true, 'Reduce object stream should end'))
 })
