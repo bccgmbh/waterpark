@@ -7,12 +7,12 @@ module.exports = {
   ...require('./src/readable/range-reader'),
 
   // Transformer
-  ...require('./src/transform/delay-transformer'),
-  ...require('./src/transform/multicore-transformer'),
-  ...require('./src/transform/reduce-transformer'),
-  ...require('./src/transform/skip-transformer'),
-  ...require('./src/transform/take-transformer'),
-  ...require('./src/transform/through-transformer'),
+  ...require('./src/transform/delay-transform'),
+  ...require('./src/transform/multicore-transform'),
+  ...require('./src/transform/reduce-transform'),
+  ...require('./src/transform/skip-transform'),
+  ...require('./src/transform/take-transform'),
+  ...require('./src/transform/through-transform'),
 
   // Writer
   ...require('./src/writable/console-writer'),

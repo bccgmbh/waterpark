@@ -19,14 +19,39 @@ In `some-file.js`
         cb()
       }))
 
-## Reader
+## Supported Streaming Modes
 
-* [fromArray](# fromArray) ( array, \[, options\] ) // object stream
+**Object Mode**: stream with `objectMode: true`
+**Buffer Mode**: stream with `objectMode: false`
+**Types**: R = Readable, T = Transform, W = Writable, D = Duplex
+
+| Name                        | Type | Object Mode | Buffer Mode |
+|:----------------------------|:----:|:-----------:|:-----------:|
+| [fromArray](#fromArray)     | R    | &#10003;    | &#8208;     |
+| [fromBuffer](#fromArray)    | R    | &#10003;    | &#8208;     |
+| [interval](#interval)       | R    | &#10003;    | &#8208;     |
+| [random](#random)           | R    | &#10003;    | &#10003;    |
+| [range](#range)             | R    | &#10003;    | &#8208;     |
+| [delay](#delay)             | T    | &#10003;    | &#10003;    |
+| [filter](#filter)           | T    | NYI         | NYI         |
+| [splice](#splice)           | T    | &#10003;    | NYI         |
+| [skip](#skip)               | T    | &#10003;    | &#10003;    |
+| [take](#take)               | T    | &#10003;    | NYI         |
+| [through](#through)         | T    | &#10003;    | &#10003;    |
+| [multicore](#multicore)     | T    | &#10003;    | NYI         |
+| [drain](#drain)             | W    | &#10003;    | &#10003;    |
+
+## Readable
+
+#fromArray
+
+fromArray( array, \[, options\] )
+
 * interval ( interval \[, options\] ) // object stream
 * random ( size, \[, options\] \[, options\] ) // buffer / object stream
 * range ( from, to, \[, options\] ) // object stream
 
-## Transformer
+## Transform
 * delay - (milliseconds, jitter, options) // object stream
 * delayBuffer - (milliseconds, jitter, options) // buffer stream
 * filter - (options, fn) // buffer / object stream
@@ -37,7 +62,7 @@ In `some-file.js`
 * through - (options, fn(data, encoding, cb)) // buffer / object stream
 * multicore - (modulePath, cores, options) // buffer / object stream
 
-## Writer
+## Writable
 
 * drainObjects - (options) // object writer
 * drain - (options) // buffer writer
