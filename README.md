@@ -22,13 +22,15 @@ In `some-file.js`
 ## Supported Streaming Modes
 
 **Object Mode**: stream with `objectMode: true`
+
 **Buffer Mode**: stream with `objectMode: false`
+
 **Types**: R = Readable, T = Transform, W = Writable, D = Duplex
 
 | Name                        | Type | Object Mode | Buffer Mode |
 |:----------------------------|:----:|:-----------:|:-----------:|
-| [fromArray](#fromArray)     | R    | &#10003;    | &#8208;     |
-| [fromBuffer](#fromArray)    | R    | &#10003;    | &#8208;     |
+| [fromArray](#fromarray)     | R    | &#10003;    | &#8208;     |
+| [fromBuffer](#frombuffer)   | R    | &#10003;    | &#8208;     |
 | [interval](#interval)       | R    | &#10003;    | &#8208;     |
 | [random](#random)           | R    | &#10003;    | &#10003;    |
 | [range](#range)             | R    | &#10003;    | &#8208;     |
@@ -43,13 +45,47 @@ In `some-file.js`
 
 ## Readable
 
-#fromArray
+### fromArray
 
-fromArray( array, \[, options\] )
+creates a readable object stream form an array.
 
-* interval ( interval \[, options\] ) // object stream
-* random ( size, \[, options\] \[, options\] ) // buffer / object stream
-* range ( from, to, \[, options\] ) // object stream
+`fromArray( array [, options] )`
+
+
+**Parameters**
+* array {Array} source for the readable stream
+* options {Object} \<optional\> ReadableOptions
+
+
+**Example**
+
+    const {fromArray} = require('waterpark')
+    fromArray([1, 2, 3])
+
+### interval
+
+Periodically emits elements.
+
+`interval ( interval [, options] )`
+
+**Parameters**
+* interval {Integer} interval in milliseconds
+* options {Object} \<optional\> ReadableOptions
+
+**Example**
+
+    const {interval} = require('waterpark')
+    interval(100)
+
+
+### random
+
+    random ( size, \[, options\] \[, options\] ) // buffer / object stream
+
+### range
+
+    range ( from, to, \[, options\] ) // object stream
+
 
 ## Transform
 * delay - (milliseconds, jitter, options) // object stream
@@ -67,12 +103,4 @@ fromArray( array, \[, options\] )
 * drainObjects - (options) // object writer
 * drain - (options) // buffer writer
 * console - (options)
-
-## Reader
-
-### fromArray
-
-creates a readable stream form an array.
-
-    fromArray( array, [, options] )
 
