@@ -15,6 +15,6 @@ module.exports = {
   ...require('./src/transform/through-transformer'),
 
   // Writer
-  ...require('./src/writeable/console-writer'),
-  ...require('./src/writeable/null-writer')
+  ...require('./src/writable/console-writer'),
+  ...require('./src/writable/null-writer')
 }
