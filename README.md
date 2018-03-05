@@ -29,7 +29,7 @@ In `some-file.js`
 
 | Name                        | Type | Object Mode | Buffer Mode |
 |:----------------------------|:----:|:-----------:|:-----------:|
-| [fromArray](#fromarray)     | R    | &#10003;    | &#8208;     |
+| [fromArray](#fromarray-array-options)     | R    | &#10003;    | &#8208;     |
 | [fromBuffer](#frombuffer)   | R    | &#10003;    | &#8208;     |
 | [interval](#interval)       | R    | &#10003;    | &#8208;     |
 | [random](#random)           | R    | &#10003;    | &#10003;    |
@@ -45,16 +45,11 @@ In `some-file.js`
 
 ## Readable
 
-### fromArray
-
-creates a readable object stream form an array.
-
-`fromArray( array [, options] )`
-
-
-**Parameters**
+### fromArray (array \[, options\])
 * array {Array} source for the readable stream
 * options {Object} \<optional\> ReadableOptions
+
+creates a readable object stream form an array.
 
 
 **Example**
@@ -62,25 +57,23 @@ creates a readable object stream form an array.
     const {fromArray} = require('waterpark')
     fromArray([1, 2, 3])
 
-### interval
-
-Periodically emits elements.
-
-`interval ( interval [, options] )`
-
-**Parameters**
+### interval ( interval \[, options\] )
 * interval {Integer} interval in milliseconds
 * options {Object} \<optional\> ReadableOptions
+
+Periodically emits elements.
 
 **Example**
 
     const {interval} = require('waterpark')
-    interval(100)
+    interval(100).pipe(process.stdout)
 
 
-### random
+### random ( size, \[, options\] )
+* size {Integer} In object mode: number of random strings.
+    In buffer mode: number of random bytes.
+* options {Object} \<optional\> ReadableOptions
 
-    random ( size, \[, options\] \[, options\] ) // buffer / object stream
 
 ### range
 
