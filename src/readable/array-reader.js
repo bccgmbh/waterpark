@@ -6,9 +6,8 @@ const {Readable} = require('stream')
 class FromArrayReader extends Readable {
   constructor (arr, options = {}) {
     if (!Array.isArray(arr)) throw new TypeError('Expecting Array')
-    options.objectMode = true
-    super(options)
-    this.arr = arr
+    super(Object.assign({objectMode: true}, options))
+    this.arr = arr.reverse()
   }
 
   _read (size) {
