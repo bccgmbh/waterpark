@@ -27,13 +27,13 @@ In `some-file.js`
 
 **Types**: R = Readable, T = Transform, W = Writable, D = Duplex
 
-| Name                        | Type | Object Mode | Buffer Mode |
-|:----------------------------|:----:|:-----------:|:-----------:|
-| [fromArray](#fromarray-array-options)     | R    | &#10003;    | &#8208;     |
-| [fromBuffer](#frombuffer)   | R    | &#10003;    | &#8208;     |
-| [interval](#interval)       | R    | &#10003;    | &#8208;     |
-| [random](#random)           | R    | &#10003;    | &#10003;    |
-| [range](#range)             | R    | &#10003;    | &#8208;     |
+| Name                                      | Type | Object Mode | Buffer Mode |
+|:------------------------------------------|:----:|:-----------:|:-----------:|
+| [fromArray](#fromarray-array--options)    | R    | &#10003;    | &#8208;     |
+| [fromBuffer](#frombuffer-buffer--options) | R    | &#10003;    | &#8208;     |
+| [interval](#interval-interval--options)   | R    | &#10003;    | &#8208;     |
+| [random](#random-size--options)           | R    | &#10003;    | &#10003;    |
+| [range](#range-from-to--options)          | R    | &#10003;    | &#8208;     |
 | [delay](#delay)             | T    | &#10003;    | &#10003;    |
 | [filter](#filter)           | T    | NYI         | NYI         |
 | [splice](#splice)           | T    | &#10003;    | NYI         |
@@ -51,13 +51,25 @@ In `some-file.js`
 
 creates a readable object stream form an array.
 
+**Example**
+
+    const {fromArray} = require('waterpark')
+    fromArray([1, 2, 3])
+
+
+### fromBuffer (buffer \[, options\])
+* buffer {Buffer} source for the readable stream
+* options {Object} \<optional\> ReadableOptions
+
+creates a readable object stream form an array.
 
 **Example**
 
     const {fromArray} = require('waterpark')
     fromArray([1, 2, 3])
 
-### interval ( interval \[, options\] )
+
+### interval (interval \[, options\])
 * interval {Integer} interval in milliseconds
 * options {Object} \<optional\> ReadableOptions
 
@@ -69,15 +81,33 @@ Periodically emits elements.
     interval(100).pipe(process.stdout)
 
 
-### random ( size, \[, options\] )
+
+### random (size \[, options\])
 * size {Integer} In object mode: number of random strings.
     In buffer mode: number of random bytes.
 * options {Object} \<optional\> ReadableOptions
 
+Emits random strings / buffers with a given size.
 
-### range
+**Example**
 
-    range ( from, to, \[, options\] ) // object stream
+    const {interval} = require('waterpark')
+    interval(100).pipe(process.stdout)
+
+
+
+### range (from, to \[, options\])
+* from {Integer} included range start
+* to {Integer} included range end
+
+Emits integers in sequence from the defined range.
+This stream operates in *object mode*.
+
+**Example**
+
+    const {range} = require('waterpark')
+    range(1, 10).pipe(process.stdout)
+
 
 
 ## Transform
