@@ -32,7 +32,7 @@ const multicore = (path, cores = 1) => {
       // debug('%s <= %d | %s', msg[0].padStart(3), child.pid, msg[1])
       const cb = child.cb
       delete child.cb
-      cb(null, msg[1])
+      cb(null, msg)
     })
   })
 

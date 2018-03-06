@@ -39,11 +39,11 @@ range(1, 10)
 | [range](#range-from-to-options)               | R    | &#10003;    | &#8208;     |
 | [delay](#delay-milliseconds-jitter-options)   | T    | &#10003;    | &#10003;    |
 | [filter](#filter-fn-options)                  | T    | &#10003;    | &#8208;     |
+| [multicore](#multicore-path-cores-options)    | T    | &#10003;    | NYI         |
 | [splice](#splice)           | T    | &#10003;    | NYI         |
 | [skip](#skip)               | T    | &#10003;    | &#10003;    |
 | [take](#take)               | T    | &#10003;    | NYI         |
 | [through](#through)         | T    | &#10003;    | &#10003;    |
-| [multicore](#multicore)     | T    | &#10003;    | NYI         |
 | [drain](#drain)             | W    | &#10003;    | &#10003;    |
 
 ## fromArray (array\[, options\])
@@ -219,12 +219,73 @@ Expected output:
 The inital range 1 to 5 is filtered for odd numbers
 
 
+## multicore (path, cores\[, options\])
+* `path` <[String]> path to module that will be used for clustering.
+* `cores` <[Number]> number of cores used in parallel.
+* `options` <[TransformOptions]> optional stream options.
+* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10007;
+
+Stream operations in parallel on multiple cores. &#9733;
+
+Forks the module referenced by `path`, `core` times, spreads the
+previous stream data to these child processes and collects their
+digests while preserving order.
+
+Communication between the main process and child processes is done via
+JSON encoding. Include serialization / deserialization of message sent
+to the worker and back into your performance estimation.
+If your work is mostly I/O bound you might be looking for
+[parallel-transform] which is used in `multicore` as scheduler.
+
+This stream operates in object mode per default.
+
+For optimal performance, use the number of [physical cores](https://nodejs.org/api/os.html#os_os_cpus).
+Exceeding that amount is possible on machines with hyper
+threading, but if the operation is cpu bound (not I/O bound)
+performance will decrease due to thrashing.
+
+**Example**
+
+Let's do some cpu intense calculation and compute the 1e6-fold
+SHA256 hash of multiple messages.
+
+`./main.js`
+```javascript
+const {range, multicore} = require('waterpark')
+range(1, 12)
+  .pipe(multicore(require.resolve('./worker.js'), 4))
+  .on('data', console.log)
+```
+
+`./worker.js`
+```javascript
+const {createHash} = require('crypto')
+
+process.on('message', (msg) => {
+  for (let i = 1e6; i > 0; i--) {
+    msg = createHash('sha256').update(msg.toString()).digest('hex')
+  }
+  process.send(msg)
+})
+```
+
+Then execute `node main`
+
+Expected output:
+
+    d6c3110abae572a3ce11a696068dca0f01961fbbf9f2c08bdfdde3640b79db0b
+    3a2ae473ab4a5fc533adb7367af8b1ffdd5a5a78fafb51945a0869021b07bb14
+    945a76e4ef3a32651ffde16b90d26c24bbadc9bdf50ff5f580f869108d6bff86
+    60ca5d721a66d84bfcfab6e0b79a8f5e83bb7a7cd24dcf11dcf4b8a348cf5fe8
+    ...
+
+Each line represents the outcome of a CPU intense calculation.
+
 ## spliceObjects - (options, every, start, deleteCount, ...item)
 ## spliceBuffers - (options, every, start, deleteCount, buffer)
 ## skip - (amount, every, options)
 ## take - (amount, every, options)
 ## through - (options, fn(data, encoding, cb))
-## multicore - (modulePath, cores, options)
 ## drainObjects - (options)
 ## drain - (options)
 ## console - (options)
@@ -245,3 +306,4 @@ The inital range 1 to 5 is filtered for odd numbers
 [DuplexOptions]: https://nodejs.org/api/stream.html#stream_new_stream_duplex_options
 
 [setInterval]: https://nodejs.org/api/timers.html#timers_setinterval_callback_delay_args
+[parallel-transform]: https://www.npmjs.com/package/parallel-transform
