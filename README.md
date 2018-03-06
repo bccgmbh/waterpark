@@ -39,7 +39,7 @@ range(1, 10)
 | [range](#range-from-to-options)               | R    | &#10003;    | &#8208;     |
 | [delay](#delay-milliseconds-jitter-options)   | T    | &#10003;    | &#10003;    |
 | [filter](#filter-fn-options)                  | T    | &#10003;    | &#8208;     |
-| [multicore](#multicore-path-cores-options)    | T    | &#10003;    | NYI         |
+| [multicore](#multicore-path-cores-options)    | T    | &#10003;    | &#10003;    |
 | [splice](#splice)           | T    | &#10003;    | NYI         |
 | [skip](#skip)               | T    | &#10003;    | &#10003;    |
 | [take](#take)               | T    | &#10003;    | NYI         |
@@ -223,7 +223,7 @@ The inital range 1 to 5 is filtered for odd numbers
 * `path` <[String]> path to module that will be used for clustering.
 * `cores` <[Number]> number of cores used in parallel.
 * `options` <[TransformOptions]> optional stream options.
-* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10007;
+* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10003;
 
 Stream operations in parallel on multiple cores. &#9733;
 
@@ -236,8 +236,6 @@ JSON encoding. Include serialization / deserialization of message sent
 to the worker and back into your performance estimation.
 If your work is mostly I/O bound you might be looking for
 [parallel-transform] which is used in `multicore` as scheduler.
-
-This stream operates in object mode per default.
 
 For optimal performance, use the number of [physical cores](https://nodejs.org/api/os.html#os_os_cpus).
 Exceeding that amount is possible on machines with hyper
