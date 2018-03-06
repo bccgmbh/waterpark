@@ -4,7 +4,7 @@ class DelayTransform extends Transform {
   constructor (millis, jitter = 0, options = {}) {
     super(options)
     this.millis = millis
-    this.jitter = jitter
+    this.jitter = Math.min(millis, jitter)
   }
 
   _transform (chunk, encoding, callback) {
