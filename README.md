@@ -34,11 +34,11 @@ range(1, 10)
 |:----------------------------------------------|:----:|:-----------:|:-----------:|
 | [fromArray](#fromarray-array-options)         | R    | &#10003;    | &#10003;    |
 | [fromBuffer](#frombuffer-buffer-options)      | R    | &#8208;     | &#10003;    |
-| [interval](#interval-interval-options)        | R    | &#10003;    | &#10003;     |
+| [interval](#interval-interval-options)        | R    | &#10003;    | &#10003;    |
 | [random](#random-size-options)                | R    | &#10003;    | &#10003;    |
 | [range](#range-from-to-options)               | R    | &#10003;    | &#8208;     |
 | [delay](#delay-milliseconds-jitter-options)   | T    | &#10003;    | &#10003;    |
-| [filter](#filter)           | T    | NYI         | NYI         |
+| [filter](#filter-fn-options)                  | T    | &#10003;    | &#8208;     |
 | [splice](#splice)           | T    | &#10003;    | NYI         |
 | [skip](#skip)               | T    | &#10003;    | &#10003;    |
 | [take](#take)               | T    | &#10003;    | NYI         |
@@ -47,11 +47,9 @@ range(1, 10)
 | [drain](#drain)             | W    | &#10003;    | &#10003;    |
 
 ## fromArray (array\[, options\])
-<div style="text-align: right">Readable | objec mode &#10003; | buffer mode &#10003;</div>
-
 * `array` <[Array]> source for the readable stream
 * `options` <[ReadableOptions]> options for a readable stream.
-* Returns: <[Readable]> compatible with object abd buffer mode.
+* Returns: <[Readable]> supporting objec mode &#10003; | buffer mode &#10003;
 
 Creates a readable stream form an array.
 
@@ -72,10 +70,9 @@ Expected output:
 
 
 ## fromBuffer (buffer\[, options\])
-<div style="text-align: right">Readable | objec mode &#10007; | buffer mode &#10003;</div>
-
 * `buffer` <[Buffer]> source for the readable stream
 * `options` <[ReadableOptions]> options for a readable stream.
+* Returns: <[Readable]> supporting objec mode &#10007; | buffer mode &#10003;
 
 Creates a readable stream form a buffer.
 
@@ -96,11 +93,9 @@ Expected output:
     s
 
 ## interval (interval\[, options\])
-<div style="text-align: right">Readable | objec mode &#10003; | buffer mode &#10003;</div>
-
 * `interval` <[Number]> interval in milliseconds
 * `options` <[ReadableOptions]> options for a readable stream.
-* Returns: <[Readable]> operating in **object mode!**
+* Returns: <[Readable]> supporting object mode &#10003; | buffer mode &#10003;
 
 Periodically emits elements.
 
@@ -113,10 +108,8 @@ of milliseconds.
 ```javascript
 const {interval} = require('waterpark')
 
-interval(1000)
-  .on('data', b => {
-    console.log(parseInt(b.toString()))
-  })
+interval(500, {objectMode: true})
+  .on('data', console.log)
 ```
 
 Expected output:
@@ -127,12 +120,10 @@ Expected output:
     ...
 
 ## random (size\[, options\])
-<div style="text-align: right">Readable | objec mode &#10003; | buffer mode &#10003;</div>
-
 * `size` <[Number]> In object mode: A positive number of random strings.
     In buffer mode: number of random bytes.
 * `options` <[ReadableOptions]> options for a readable stream.
-* Returns: <[Readable]> compatible with object abd buffer mode.
+* Returns: <[Readable]> supporting object mode &#10003; | buffer mode &#10003;
 
 Emits random strings / buffers with a given size.
 
@@ -152,12 +143,10 @@ Example output
 
 
 ## range (from, to\[, options\])
-<div style="text-align: right">Readable | objec mode &#10003; | buffer mode &#10007;</div>
-
 * `from` <[Number]> integer, included range start.
 * `to` <[Number]> integer, included range end.
 * `options` <[ReadableOptions]> optional stream options.
-* Returns: <[Readable]> operating in **object mode!**
+* Returns: <[Readable]> supporting object mode &#10003; | buffer mode &#10007;
 
 Emits integers in sequence from the defined range.
 `from` may be smaller than `to`, but both must be integer.
@@ -178,12 +167,10 @@ Expected output:
 
 
 ## delay (milliseconds\[, jitter\]\[, options\])
-<div style="text-align: right">Transform | objec mode &#10003; | buffer mode &#10003;</div>
-
 * `milliseconds` <[Number]> integer, included range start.
 * `jitter` <[Number]> integer, included range end.
-* `options` <[ReadableOptions]> optional stream options.
-* Returns: <[Transform]> compatible with object abd buffer mode.
+* `options` <[TransformOptions]> optional stream options.
+* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10003;
 
 Emits integers in sequence from the defined range.
 `from` may be smaller than `to`, but both must be integer.
@@ -191,7 +178,7 @@ Emits integers in sequence from the defined range.
 **Example**
 
 ```javascript
-const {range, delay} = require('.')
+const {range, delay} = require('waterpark')
 range(1, 3)
   .pipe(delay(500))
   .on('data', console.log)
@@ -206,7 +193,32 @@ Expected output:
 Lines will be printed in sequence. Each one delayed by ~500ms.
 
 
-## filter - (options, fn)
+## filter (fn\[, options\])
+* `fn` <[Function]\(data\) => [Boolean]> pipe data that meets the filter condition.
+* `options` <[TransformOptions]> optional stream options.
+* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10007;
+
+Emits data that passes the `fn` filter condition.
+This stream operates in object mode per default.
+
+**Example**
+
+```javascript
+const {range, filter} = require('waterpark')
+range(1, 5)
+  .pipe(filter(n => n % 2))
+  .on('data', console.log)
+```
+
+Expected output:
+
+    1
+    3
+    5
+
+The inital range 1 to 5 is filtered for odd numbers
+
+
 ## spliceObjects - (options, every, start, deleteCount, ...item)
 ## spliceBuffers - (options, every, start, deleteCount, buffer)
 ## skip - (amount, every, options)
