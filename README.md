@@ -1,3 +1,5 @@
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
 # waterpark
 Stream toolbox library
 
@@ -14,10 +16,7 @@ In `some-file.js`
     range(1, 10)
       .pipe(skipObjects(4))
       .pipe(reduceObjects({}, (sum, val) => sum + val, 0))
-      .pipe(through((data, encoding, cb) => {
-        console.log(data)
-        cb()
-      }))
+      .on('data', console.log)
 
 ### Supported Streaming Modes
 
@@ -27,14 +26,14 @@ In `some-file.js`
 
 **Types**: R = Readable, T = Transform, W = Writable, D = Duplex
 
-| Name                                      | Type | Object Mode | Buffer Mode |
-|:------------------------------------------|:----:|:-----------:|:-----------:|
-| [fromArray](#fromarray-array-options)    | R    | &#10003;    | &#10003;    |
-| [fromBuffer](#frombuffer-buffer-options) | R    | &#8208;     | &#10003;    |
-| [interval](#interval-interval-options)   | R    | &#10003;    | &#8208;     |
-| [random](#random-size-options)           | R    | &#10003;    | &#10003;    |
-| [range](#range-from-to-options)          | R    | &#10003;    | &#8208;     |
-| [delay](#delay-milliseconds-jitter-options)             | T    | &#10003;    | &#10003;    |
+| Name                                          | Type | Object Mode | Buffer Mode |
+|:----------------------------------------------|:----:|:-----------:|:-----------:|
+| [fromArray](#fromarray-array-options)         | R    | &#10003;    | &#10003;    |
+| [fromBuffer](#frombuffer-buffer-options)      | R    | &#8208;     | &#10003;    |
+| [interval](#interval-interval-options)        | R    | &#10003;    | &#8208;     |
+| [random](#random-size-options)                | R    | &#10003;    | &#10003;    |
+| [range](#range-from-to-options)               | R    | &#10003;    | &#8208;     |
+| [delay](#delay-milliseconds-jitter-options)   | T    | &#10003;    | &#10003;    |
 | [filter](#filter)           | T    | NYI         | NYI         |
 | [splice](#splice)           | T    | &#10003;    | NYI         |
 | [skip](#skip)               | T    | &#10003;    | &#10003;    |
