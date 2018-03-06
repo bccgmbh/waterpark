@@ -1,7 +1,8 @@
+# waterpark
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![Build Status](https://travis-ci.org/bccgmbh/waterpark.svg?branch=master)](https://travis-ci.org/bccgmbh/waterpark)
+[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
-# waterpark
 Stream toolbox library
 
 While working with streams, these basic operations will ease your life.
@@ -12,12 +13,14 @@ While working with streams, these basic operations will ease your life.
 
 In `some-file.js`
 
-    const {range, skipObjects, reduceObjects, through} = require('waterpark')
-    
-    range(1, 10)
-      .pipe(skipObjects(4))
-      .pipe(reduceObjects({}, (sum, val) => sum + val, 0))
-      .on('data', console.log)
+```javascript
+const {range, skipObjects, reduceObjects, through} = require('waterpark')
+
+range(1, 10)
+  .pipe(skipObjects(4))
+  .pipe(reduceObjects({}, (sum, val) => sum + val, 0))
+  .on('data', console.log)
+```
 
 ### Supported Streaming Modes
 
@@ -31,7 +34,7 @@ In `some-file.js`
 |:----------------------------------------------|:----:|:-----------:|:-----------:|
 | [fromArray](#fromarray-array-options)         | R    | &#10003;    | &#10003;    |
 | [fromBuffer](#frombuffer-buffer-options)      | R    | &#8208;     | &#10003;    |
-| [interval](#interval-interval-options)        | R    | &#10003;    | &#8208;     |
+| [interval](#interval-interval-options)        | R    | &#10003;    | &#10003;     |
 | [random](#random-size-options)                | R    | &#10003;    | &#10003;    |
 | [range](#range-from-to-options)               | R    | &#10003;    | &#8208;     |
 | [delay](#delay-milliseconds-jitter-options)   | T    | &#10003;    | &#10003;    |
@@ -44,6 +47,8 @@ In `some-file.js`
 | [drain](#drain)             | W    | &#10003;    | &#10003;    |
 
 ## fromArray (array\[, options\])
+<div style="text-align: right">Readable | objec mode &#10003; | buffer mode &#10003;</div>
+
 * `array` <[Array]> source for the readable stream
 * `options` <[ReadableOptions]> options for a readable stream.
 * Returns: <[Readable]> compatible with object abd buffer mode.
@@ -52,10 +57,12 @@ Creates a readable stream form an array.
 
 **Example**
 
-    const {fromArray} = require('waterpark')
+```javascript
+const {fromArray} = require('waterpark')
 
-    fromArray(['streaming', 'is', 'awesome'])
-      .on('data', console.log)
+fromArray(['streaming', 'is', 'awesome'])
+  .on('data', console.log)
+```
 
 Expected output:
 
@@ -65,6 +72,8 @@ Expected output:
 
 
 ## fromBuffer (buffer\[, options\])
+<div style="text-align: right">Readable | objec mode &#10007; | buffer mode &#10003;</div>
+
 * `buffer` <[Buffer]> source for the readable stream
 * `options` <[ReadableOptions]> options for a readable stream.
 
@@ -87,6 +96,8 @@ Expected output:
     s
 
 ## interval (interval\[, options\])
+<div style="text-align: right">Readable | objec mode &#10003; | buffer mode &#10003;</div>
+
 * `interval` <[Number]> interval in milliseconds
 * `options` <[ReadableOptions]> options for a readable stream.
 * Returns: <[Readable]> operating in **object mode!**
@@ -99,12 +110,14 @@ of milliseconds.
 
 **Example**
 
-    const {interval} = require('waterpark')
+```javascript
+const {interval} = require('waterpark')
 
-    interval(1000)
-      .on('data', b => {
-        console.log(parseInt(b.toString()))
-      })
+interval(1000)
+  .on('data', b => {
+    console.log(parseInt(b.toString()))
+  })
+```
 
 Expected output:
 
@@ -114,6 +127,8 @@ Expected output:
     ...
 
 ## random (size\[, options\])
+<div style="text-align: right">Readable | objec mode &#10003; | buffer mode &#10003;</div>
+
 * `size` <[Number]> In object mode: A positive number of random strings.
     In buffer mode: number of random bytes.
 * `options` <[ReadableOptions]> options for a readable stream.
@@ -123,9 +138,11 @@ Emits random strings / buffers with a given size.
 
 **Example**
 
-    const {random} = require('waterpark')
-    random(32 * 3, 'hex', {highWaterMark: 32})
-      .on('data', console.log)
+```javascript
+const {random} = require('waterpark')
+random(32 * 3, 'hex', {highWaterMark: 32})
+  .on('data', console.log)
+```
 
 Example output
 
@@ -135,6 +152,8 @@ Example output
 
 
 ## range (from, to\[, options\])
+<div style="text-align: right">Readable | objec mode &#10003; | buffer mode &#10007;</div>
+
 * `from` <[Number]> integer, included range start.
 * `to` <[Number]> integer, included range end.
 * `options` <[ReadableOptions]> optional stream options.
@@ -145,8 +164,11 @@ Emits integers in sequence from the defined range.
 
 **Example**
 
-    const {range} = require('waterpark')
-    range(1, 3).on('data', console.log)
+```javascript
+const {range} = require('waterpark')
+range(1, 3)
+  .on('data', console.log)
+```
 
 Expected output:
 
@@ -156,18 +178,24 @@ Expected output:
 
 
 ## delay (milliseconds\[, jitter\]\[, options\])
+<div style="text-align: right">Transform | objec mode &#10003; | buffer mode &#10003;</div>
+
 * `milliseconds` <[Number]> integer, included range start.
 * `jitter` <[Number]> integer, included range end.
 * `options` <[ReadableOptions]> optional stream options.
-* Returns: <[Readable]> compatible with object abd buffer mode.
+* Returns: <[Transform]> compatible with object abd buffer mode.
 
 Emits integers in sequence from the defined range.
 `from` may be smaller than `to`, but both must be integer.
 
 **Example**
 
-    const {range} = require('waterpark')
-    range(1, 3).on('data', console.log)
+```javascript
+const {range, delay} = require('.')
+range(1, 3)
+  .pipe(delay(500))
+  .on('data', console.log)
+```
 
 Expected output:
 
@@ -175,9 +203,8 @@ Expected output:
     2
     3
 
+Lines will be printed in sequence. Each one delayed by ~500ms.
 
-
-## delayBuffer - (milliseconds, jitter, options)
 
 ## filter - (options, fn)
 ## spliceObjects - (options, every, start, deleteCount, ...item)
@@ -195,7 +222,14 @@ Expected output:
 [Object]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
 [Array]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
 [Buffer]: https://nodejs.org/api/buffer.html#buffer_buffer
-[ReadableOptions]: https://nodejs.org/api/stream.html#stream_new_stream_readable_options
+
 [Readable]: https://nodejs.org/api/stream.html#stream_readable_streams
+[ReadableOptions]: https://nodejs.org/api/stream.html#stream_new_stream_readable_options
+[Transform]: https://nodejs.org/api/stream.html#stream_class_stream_transform
+[TransformOptions]: https://nodejs.org/api/stream.html#stream_new_stream_transform_options
+[Writable]: https://nodejs.org/api/stream.html#stream_class_stream_writable
+[WritableOptions]: https://nodejs.org/api/stream.html#stream_constructor_new_stream_writable_options
+[Duplex]: https://nodejs.org/api/stream.html#stream_class_stream_duplex
+[DuplexOptions]: https://nodejs.org/api/stream.html#stream_new_stream_duplex_options
 
 [setInterval]: https://nodejs.org/api/timers.html#timers_setinterval_callback_delay_args
