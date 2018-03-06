@@ -6,7 +6,7 @@ const worker = require.resolve('./multicore-sub.js')
 module.exports = (cores) => {
   return tape(`[MulticoreTransform] Benchmark MulticoreTransform with ${cores}x core`, t => {
     const startTime = Date.now()
-    range(1, 10 * cores)
+    range(1, 20)
       .pipe(through((data, encoding, cb) => cb(null, data.toString())))
       .pipe(multicore(worker, cores))
       .pipe(through((data, encoding, cb) => {

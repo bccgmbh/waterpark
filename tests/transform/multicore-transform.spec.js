@@ -10,7 +10,6 @@ const bench = require('./multicore-bench')
 //  bench() multiplies the workload with the number of cores
 
 const MAX_CORES = Math.min(4, require('os').cpus().length)
-for (let n = 0; 2 ** n < MAX_CORES; n++) {
-  // console.log('[bench] ', 2 ** n)
+for (let n = 0; 2 ** n <= MAX_CORES; n++) {
   bench(2 ** n)
 }
