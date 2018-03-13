@@ -6,7 +6,7 @@ tape('[Filter] object stream', t => {
   t.plan(4)
 
   range(1, 5)
-    .pipe(filter(n => n % 2)) // filter odd numbers
+    .pipe(filter({filter: n => n % 2})) // filter odd numbers
     .on('data', data => {
       t.equal(data, result.shift(), `filtered odd numbers ${data}`)
     })

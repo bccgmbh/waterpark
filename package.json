@@ -1,6 +1,6 @@
 {
   "name": "waterpark",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Stream toolbox - In development, call signatures will change!",
   "main": "index.js",
   "scripts": {

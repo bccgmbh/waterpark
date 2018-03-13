@@ -22,6 +22,7 @@ range(1, 10)
   .on('data', console.log)
 ```
 
+
 ### Supported Streaming Modes
 
 **Object Mode**: stream with `objectMode: true`
@@ -30,25 +31,25 @@ range(1, 10)
 
 **Types**: R = Readable, T = Transform, W = Writable, D = Duplex
 
-| Name                                          | Type | Object Mode | Buffer Mode |
-|:----------------------------------------------|:----:|:-----------:|:-----------:|
-| [fromArray](#fromarray-array-options)         | R    | &#10003;    | &#10003;    |
-| [fromBuffer](#frombuffer-buffer-options)      | R    | &#8208;     | &#10003;    |
-| [interval](#interval-interval-options)        | R    | &#10003;    | &#10003;    |
-| [random](#random-size-options)                | R    | &#10003;    | &#10003;    |
-| [range](#range-from-to-options)               | R    | &#10003;    | &#8208;     |
-| [delay](#delay-milliseconds-jitter-options)   | T    | &#10003;    | &#10003;    |
-| [filter](#filter-fn-options)                  | T    | &#10003;    | &#8208;     |
-| [multicore](#multicore-path-cores-options)    | T    | &#10003;    | &#10003;    |
-| [splice](#splice)           | T    | &#10003;    | NYI         |
-| [skip](#skip)               | T    | &#10003;    | &#10003;    |
-| [take](#take)               | T    | &#10003;    | NYI         |
-| [through](#through)         | T    | &#10003;    | &#10003;    |
-| [drain](#drain)             | W    | &#10003;    | &#10003;    |
+| Name                               | Type | Object Mode | Buffer Mode |
+|:-----------------------------------|:----:|:-----------:|:-----------:|
+| [fromArray](#fromarray-options)    | R    | &#10003;    | &#10003;    |
+| [fromBuffer](#frombuffer-options)  | R    | &#8208;     | &#10003;    |
+| [interval](#interval-options)      | R    | &#10003;    | &#10003;    |
+| [random](#random-options)          | R    | &#10003;    | &#10003;    |
+| [range](#range-options)            | R    | &#10003;    | &#8208;     |
+| [delay](#delay-options)            | T    | &#10003;    | &#10003;    |
+| [filter](#filter-options)          | T    | &#10003;    | &#8208;     |
+| [multicore](#multicore-options)    | T    | &#10003;    | &#10003;    |
+| [splice](#splice)                  | T    | &#10003;    | NYI         |
+| [skip](#skip)                      | T    | &#10003;    | &#10003;    |
+| [take](#take)                      | T    | &#10003;    | NYI         |
+| [through](#through)                | T    | &#10003;    | &#10003;    |
+| [drain](#drain)                    | W    | &#10003;    | &#10003;    |
 
-## fromArray (array\[, options\])
+## fromArray (options)
 * `array` <[Array]> source for the readable stream
-* `options` <[ReadableOptions]> options for a readable stream.
+* ...`options` <[ReadableOptions]> options for a readable stream.
 * Returns: <[Readable]> supporting objec mode &#10003; | buffer mode &#10003;
 
 Creates a readable stream form an array.
@@ -58,7 +59,8 @@ Creates a readable stream form an array.
 ```javascript
 const {fromArray} = require('waterpark')
 
-fromArray(['streaming', 'is', 'awesome'])
+const array = ['streaming', 'is', 'awesome']
+fromArray({array})
   .on('data', console.log)
 ```
 
@@ -69,9 +71,9 @@ Expected output:
     awesome
 
 
-## fromBuffer (buffer\[, options\])
+## fromBuffer (options)
 * `buffer` <[Buffer]> source for the readable stream
-* `options` <[ReadableOptions]> options for a readable stream.
+* ...`options` <[ReadableOptions]> options for a readable stream.
 * Returns: <[Readable]> supporting objec mode &#10007; | buffer mode &#10003;
 
 Creates a readable stream form a buffer.
@@ -82,7 +84,7 @@ Creates a readable stream form a buffer.
 const {fromBuffer} = require('waterpark')
 
 const buffer = Buffer.from('letters')
-fromBuffer(buffer, {highWaterMark: 3})
+fromBuffer({buffer, highWaterMark: 3})
   .on('data', buf => console.log(buf.toString()))
 ```
 
@@ -92,9 +94,9 @@ Expected output:
     ter
     s
 
-## interval (interval\[, options\])
+## interval (options)
 * `interval` <[Number]> interval in milliseconds
-* `options` <[ReadableOptions]> options for a readable stream.
+* ...`options` <[ReadableOptions]> options for a readable stream.
 * Returns: <[Readable]> supporting object mode &#10003; | buffer mode &#10003;
 
 Periodically emits elements.
@@ -108,7 +110,7 @@ of milliseconds.
 ```javascript
 const {interval} = require('waterpark')
 
-interval(500, {objectMode: true})
+interval({interval: 500, objectMode: true})
   .on('data', console.log)
 ```
 
@@ -119,10 +121,10 @@ Expected output:
     1520281270346
     ...
 
-## random (size\[, options\])
+## random (options)
 * `size` <[Number]> In object mode: A positive number of random strings.
     In buffer mode: number of random bytes.
-* `options` <[ReadableOptions]> options for a readable stream.
+* ...`options` <[ReadableOptions]> options for a readable stream.
 * Returns: <[Readable]> supporting object mode &#10003; | buffer mode &#10003;
 
 Emits random strings / buffers with a given size.
@@ -131,7 +133,11 @@ Emits random strings / buffers with a given size.
 
 ```javascript
 const {random} = require('waterpark')
-random(32 * 3, 'hex', {highWaterMark: 32})
+random.obj({
+    size: 32 * 3,
+    encoding: 'hex',
+    highWaterMark: 32
+  })
   .on('data', console.log)
 ```
 
@@ -142,10 +148,10 @@ Example output
     8a9ffdd4f6a90ebae1364bede92fb19b428670af05b3fb184b4b39de582eb7ba
 
 
-## range (from, to\[, options\])
+## range (options)
 * `from` <[Number]> integer, included range start.
 * `to` <[Number]> integer, included range end.
-* `options` <[ReadableOptions]> optional stream options.
+* ...`options` <[ReadableOptions]> optional stream options.
 * Returns: <[Readable]> supporting object mode &#10003; | buffer mode &#10007;
 
 Emits integers in sequence from the defined range.
@@ -155,7 +161,8 @@ Emits integers in sequence from the defined range.
 
 ```javascript
 const {range} = require('waterpark')
-range(1, 3)
+
+range({from: 1, to: 3})
   .on('data', console.log)
 ```
 
@@ -166,21 +173,20 @@ Expected output:
     3
 
 
-## delay (milliseconds\[, jitter\]\[, options\])
+## delay (options)
 * `milliseconds` <[Number]> integer, included range start.
 * `jitter` <[Number]> integer, included range end.
-* `options` <[TransformOptions]> optional stream options.
+* ...`options` <[TransformOptions]> optional stream options.
 * Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10003;
 
-Emits integers in sequence from the defined range.
-`from` may be smaller than `to`, but both must be integer.
+Emits data delayed by a specified amount of time.
 
 **Example**
 
 ```javascript
 const {range, delay} = require('waterpark')
-range(1, 3)
-  .pipe(delay(500))
+range({from: 1, to: 3})
+  .pipe(delay({delay: 500}))
   .on('data', console.log)
 ```
 
@@ -193,12 +199,12 @@ Expected output:
 Lines will be printed in sequence. Each one delayed by ~500ms.
 
 
-## filter (fn\[, options\])
-* `fn` <[Function]\(data\) => [Boolean]> pipe data that meets the filter condition.
-* `options` <[TransformOptions]> optional stream options.
+## filter (options)
+* `filter` <[Function]\(data\) => [Boolean]> pipe data that meets the filter condition.
+* ...`options` <[TransformOptions]> optional stream options.
 * Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10007;
 
-Emits data that passes the `fn` filter condition.
+Emits data that passes the `filter` filter condition.
 This stream operates in object mode per default.
 
 **Example**
@@ -219,10 +225,10 @@ Expected output:
 The inital range 1 to 5 is filtered for odd numbers
 
 
-## multicore (path, cores\[, options\])
+## multicore (options)
 * `path` <[String]> path to module that will be used for clustering.
 * `cores` <[Number]> number of cores used in parallel.
-* `options` <[TransformOptions]> optional stream options.
+* ...`options` <[TransformOptions]> optional stream options.
 * Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10003;
 
 Stream operations in parallel on multiple cores. &#9733;
@@ -251,7 +257,10 @@ SHA256 hash of multiple messages.
 ```javascript
 const {range, multicore} = require('waterpark')
 range(1, 12)
-  .pipe(multicore(require.resolve('./worker.js'), 4))
+  .pipe(multicore({
+    path: require.resolve('./worker.js'),
+    cores: 4
+  }))
   .on('data', console.log)
 ```
 

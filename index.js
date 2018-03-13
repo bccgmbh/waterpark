@@ -12,10 +12,15 @@ module.exports = {
   ...require('./src/transform/multicore-transform'),
   ...require('./src/transform/reduce-transform'),
   ...require('./src/transform/skip-transform'),
+  ...require('./src/transform/slice-transform'),
+  ...require('./src/transform/splice-transform'),
   ...require('./src/transform/take-transform'),
   ...require('./src/transform/through-transform'),
 
   // Writer
   ...require('./src/writable/console-writer'),
-  ...require('./src/writable/null-writer')
+  ...require('./src/writable/null-writer'),
+
+  // Duplex
+  ...require('./src/duplex/compose-duplex')
 }

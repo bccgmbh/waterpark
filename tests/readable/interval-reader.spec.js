@@ -5,7 +5,7 @@ tape('[IntervalReader] interval(100).pipe(take(3)) should porperly terminate aro
   t.plan(4)
   const startTime = Date.now()
   const ir = interval(100)
-  ir.pipe(take(3))
+  ir.pipe(take.obj(3))
     .on('data', (data) => t.ok(data, `interval emitted ${Date.now() - startTime}`))
     .on('finish', () => {
       // console.log('[TEST] destroy IntervalReader ' + Date.now())
