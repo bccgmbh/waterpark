@@ -28,10 +28,3 @@ tape('[RangeReader] Finite range stream counting backwards', t => {
       t.ok(true, 'Finite range reader should terminate as expected')
     })
 })
-
-tape('[RangeReader] Range stream with invalid parameters', t => {
-  t.plan(2)
-  t.throws(() => range('_', 3), 'Throws exception if from parameter is not a number')
-  t.throws(() => range(1, true), 'Throws exception if to parameter is not a number')
-  // t.end()
-})

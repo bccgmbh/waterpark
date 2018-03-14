@@ -14,11 +14,11 @@ While working with streams, these basic operations will ease your life.
 In `some-file.js`
 
 ```javascript
-const {range, skipObjects, reduceObjects, through} = require('waterpark')
+const {range, skip, reduce} = require('waterpark')
 
 range(1, 10)
-  .pipe(skipObjects(4))
-  .pipe(reduceObjects({}, (sum, val) => sum + val, 0))
+  .pipe(skip.obj(4))
+  .pipe(reduce.obj({}, (sum, val) => sum + val, 0))
   .on('data', console.log)
 ```
 
@@ -288,12 +288,10 @@ Expected output:
 
 Each line represents the outcome of a CPU intense calculation.
 
-## spliceObjects - (options, every, start, deleteCount, ...item)
-## spliceBuffers - (options, every, start, deleteCount, buffer)
+## splice - (options, every, start, deleteCount, ...item)
 ## skip - (amount, every, options)
 ## take - (amount, every, options)
 ## through - (options, fn(data, encoding, cb))
-## drainObjects - (options)
 ## drain - (options)
 ## console - (options)
 

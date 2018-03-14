@@ -44,7 +44,7 @@ tape('[Skip] nothing', t => {
     .on('end', () => t.ok(true, 'Skip object stream should end'))
 })
 
-tape.skip('[Skip] buffer stream', t => {
+tape('[Skip] buffer stream', t => {
   t.plan(2)
   fromBuffer(Buffer.from('abcdef'))
     .pipe(skip(3))
@@ -54,7 +54,7 @@ tape.skip('[Skip] buffer stream', t => {
     .on('end', () => t.ok(true, 'Skip object stream should end'))
 })
 
-tape.skip('[Skip] buffer stream with low water mark', t => {
+tape('[Skip] buffer stream with low water mark', t => {
   const results = ['d', 'ef']
   t.plan(3)
   fromBuffer(Buffer.from('abcdef'), {highWaterMark: 2})

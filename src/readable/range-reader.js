@@ -5,9 +5,7 @@ const {Readable} = require('stream')
  * ObjectMode will be set to true.
  */
 class RangeReader extends Readable {
-  constructor (from, to, options = {}) {
-    if (!Number.isFinite(from)) throw new Error('RangeReader expects first parameter (from) to be a number')
-    if (!Number.isFinite(to)) throw new Error('RangeReader expects second parameter (to) to be a number')
+  constructor ({from = 0, to = Number.POSITIVE_INFINITY, ...options}) {
     options.objectMode = true
     super(options)
     this.current = from
@@ -33,5 +31,13 @@ class RangeReader extends Readable {
  */
 module.exports = {
   RangeReader,
-  range: (from, to, options) => new RangeReader(from, to, options)
+  range: (from, to, options) => {
+    if (
+      arguments.length === 1 &&
+      typeof from === 'object'
+    ) {
+      return new RangeReader(from)
+    }
+    return new RangeReader({from, to, ...options})
+  }
 }
