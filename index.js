@@ -7,6 +7,7 @@ module.exports = {
   ...require('./src/readable/range-reader'),
 
   // Transformer
+  ...require('./src/transform/concurrent-transform'),
   ...require('./src/transform/delay-transform'),
   ...require('./src/transform/filter-transform'),
   ...require('./src/transform/multicore-transform'),
