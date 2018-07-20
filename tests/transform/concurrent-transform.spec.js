@@ -69,24 +69,35 @@ tape('[Concurrent] synchronous transformation', t => {
     })
 })
 
-tape.only('[Concurrent] async unordered termination', t => {
-  let result = [2, 1, 3, 4, 5, 6]
-  let count = 0
-  t.plan(7)
+tape('[Concurrent] schuffeled results', t => {
+  // TIME   |  0  |  1  |  2  |  3  |  4  |  5  |
+  // -------+-----+-----+-----+-----+-----+------
+  // PUSH   | a:2 | c:4 | d:1 | e:1 |     |     |
+  //        | b:1 |     |     |     |     |     |
+  // -------+-----+-----+-----+-----+-----+------
+  // RESULT |     |  b  |  a  |  d  |  e  |  c  |
 
-  const now = Date.now()
-  const elapsed = () => (Date.now() - now) / 1000
-  range(1, 6)
+  let schedule = [
+    {data: 'a', delay: 2},
+    {data: 'b', delay: 1},
+    {data: 'c', delay: 4},
+    {data: 'd', delay: 1},
+    {data: 'e', delay: 1}
+  ]
+  const result = 'badec'.split('')
+  t.plan(6)
+
+  range(0, 4)
     .pipe(concurrent({
       concurrency: 2,
-      transform: function (data, encoding, cb) {
-        const delay = 1000 * (1 + ++count % 2)
-        console.log('[Transform] delay %d for %d\t%d', data, delay, elapsed())
-        setTimeout(() => cb(null, data), delay)
+      transform: function (index, encoding, cb) {
+        const {data, delay} = schedule[index]
+        setTimeout(() => cb(null, data), delay * 100)
       }
     }))
-    .on('data', data => {
-      t.equal(data, result.shift(), `data is passed concurrently ${data}   ___ ${elapsed()}`)
+    .on('data', actual => {
+      const expected = result.shift()
+      t.equal(actual, expected, `data is passed concurrently ${actual}`)
     })
     .on('end', () => {
       t.equal(result.length, 0, `Concurrent stream should end`)
