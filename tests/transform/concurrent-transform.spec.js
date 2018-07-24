@@ -17,7 +17,7 @@ tape.only('[Concurrent] stream-pauses', t => {
     .pipe(stream)
     .pipe(pause.obj({interval: 10, duration: 1000, target: stream}))
     .on('data', data => t.equal(data, counter, 'data arrived ' + counter++))
-    .on('finish', () => t.pass('end'))
+    .on('end', () => t.pass('end'))
     .on('error', err => t.fail(err))
 })
 
