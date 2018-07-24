@@ -40,6 +40,7 @@ range(0, 100)
 | [random](#random-options)          | R    | &#10003;    | &#10003;    |
 | [range](#range-options)            | R    | &#10003;    | &#8208;     |
 | [reduce](#reduce-options)          | R    | &#10003;    | &#8208;     |
+| [concurrent](#concurrent-options)  | T    | &#10003;    | &#8208;     |
 | [delay](#delay-options)            | T    | &#10003;    | &#10003;    |
 | [filter](#filter-options)          | T    | &#10003;    | &#8208;     |
 | [multicore](#multicore-options)    | T    | &#10003;    | &#10003;    |
@@ -174,6 +175,29 @@ Expected output:
     2
     3
 
+
+## concurrent (options)
+* `concurrency` <[Number]> integer, concurrent transform operations.
+* ...`options` <[TransformOptions]> optional stream options.
+* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#8208;
+
+Concurrent stream processing.
+
+**Example**
+
+```javascript
+const {range, concurrent} = require('waterpark')
+range({from: 1, to: 100})
+  .pipe(concurrent({
+    concurrency: 10,
+    transform: (data, encoding, cb) => {
+      setTimeout(() => cb(null, data), 100)
+    }
+   }))
+  .on('data', console.log)
+```
+
+Finishes in ~1s while `through` would take ~10s
 
 ## delay (options)
 * `milliseconds` <[Number]> integer, included range start.
