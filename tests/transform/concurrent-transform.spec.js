@@ -1,7 +1,7 @@
 const tape = require('tape')
 const {range, concurrent, pause} = require('../../')
 
-tape.only('[Concurrent] stream-pauses', t => {
+tape('[Concurrent] stream-pauses', t => {
   t.plan(51)
 
   const stream = concurrent({
@@ -15,7 +15,7 @@ tape.only('[Concurrent] stream-pauses', t => {
   let counter = 1
   range(1, 50)
     .pipe(stream)
-    .pipe(pause.obj({interval: 10, duration: 1000, target: stream}))
+    .pipe(pause.obj({interval: 10, duration: 100, target: stream}))
     .on('data', data => t.equal(data, counter, 'data arrived ' + counter++))
     .on('end', () => t.pass('end'))
     .on('error', err => t.fail(err))
