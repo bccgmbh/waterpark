@@ -16,9 +16,10 @@ In `some-file.js`
 ```javascript
 const {range, skip, reduce} = require('waterpark')
 
-range(1, 10)
-  .pipe(skip.obj(4))
-  .pipe(reduce.obj({}, (sum, val) => sum + val, 0))
+// sum even numbers from 0 to 100
+range(0, 100)
+  .pipe(take.obj({amount: 1, every: 2}))
+  .pipe(reduce.obj((sum, val) => sum + val, 0))
   .on('data', console.log)
 ```
 
@@ -38,12 +39,13 @@ range(1, 10)
 | [interval](#interval-options)      | R    | &#10003;    | &#10003;    |
 | [random](#random-options)          | R    | &#10003;    | &#10003;    |
 | [range](#range-options)            | R    | &#10003;    | &#8208;     |
+| [reduce](#reduce-options)          | R    | &#10003;    | &#8208;     |
 | [delay](#delay-options)            | T    | &#10003;    | &#10003;    |
 | [filter](#filter-options)          | T    | &#10003;    | &#8208;     |
 | [multicore](#multicore-options)    | T    | &#10003;    | &#10003;    |
-| [splice](#splice)                  | T    | &#10003;    | NYI         |
+| [slice](#slice)                    | T    | &#10003;    | &#10003;    |
 | [skip](#skip)                      | T    | &#10003;    | &#10003;    |
-| [take](#take)                      | T    | &#10003;    | NYI         |
+| [take](#take)                      | T    | &#10003;    | &#10003;    |
 | [through](#through)                | T    | &#10003;    | &#10003;    |
 | [drain](#drain)                    | W    | &#10003;    | &#10003;    |
 
@@ -288,13 +290,118 @@ Expected output:
 
 Each line represents the outcome of a CPU intense calculation.
 
-## splice - (options, every, start, deleteCount, ...item)
-## skip - (amount, every, options)
-## take - (amount, every, options)
-## through - (options, fn(data, encoding, cb))
-## drain - (options)
-## console - (options)
 
+## slice (options)
+* `begin` <[Number]> zero based index at which to begin extraction.
+Default is 0
+* `end` <[Number]> pass elements up to but not including (zero based index).
+* `every` <[Number]> repeat slice operation after `every` elements.
+* ...`options` <[TransformOptions]> optional stream options.
+* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10003;
+
+Similar to
+[Array.slice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)
+and [Buffer.slice()](https://nodejs.org/api/buffer.html#buffer_buf_slice_start_end)
+**slice** is acting as range filter on its source.
+
+In respect to streams potential infinite nature, the `every` parameter
+has been introduced.
+
+**Example**
+Every 5 elements, pass the 2nd to the 4th element.
+```javascript
+const {range, slice} = require('waterpark')
+range(0, 9)
+  .pipe(slice.obj(1, 4, 5))
+  .on('data', console.log)
+```
+
+Expected output:
+
+    1
+    2
+    3
+    6
+    7
+    8
+
+See: [skip](#skip-amount-every-options), [take](#take-amount-every-options)
+
+## reduce (options, fn\[, initalValue\]\[, every\])
+* `options` <[TransformOptions]> optional stream options.
+* `fn` <Function (accumulator, currentValue, currentIndex)>
+  * `accumulator` <[any]> accumulates the callbacks return values.
+  * `currentValue` <[any]> the current element being processed.
+  * `currentIndex` <[Number]> zero based index of the current element.
+* `initialValue` <[any]> Initial accumulator value. Default is 0
+* `every` <[Number]> repeat reduction after `every` steps.
+Default is infinity which reduces only once at the end of the source.
+* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10007;
+
+Reduces stream emissions to one (source stream must be finite) or many
+if `every` is set.
+
+**Example**
+Every 4 numbers emit the sum of the last 4 numbers.
+```javascript
+const {range, reduce} = require('waterpark')
+
+range.obj(1, 100)
+  .pipe({}, reduce.obj((sum, val) => sum + val, 0, 4))
+  .on('data', console.log)
+```
+
+Expected output:
+
+    10
+    26
+    42
+    58
+    74
+    ...
+
+
+## skip (amount\[, every\]\[, options\])
+* `begin` <[Number]> zero based index at which to begin extraction.
+Default is 0
+* `end` <[Number]> pass elements up to but not including (zero based index).
+* `every` <[Number]> repeat slice operation after `every` elements.
+* ...`options` <[TransformOptions]> optional stream options.
+* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10003;
+
+Similar to
+[Array.slice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)
+and [Buffer.slice()](https://nodejs.org/api/buffer.html#buffer_buf_slice_start_end)
+**slice** is acting as range filter on its source.
+
+In respect to streams potential infinite nature, the `every` parameter
+has been introduced.
+
+**Example**
+Every 5 elements, pass the 2nd to the 4th element.
+```javascript
+const {range, slice} = require('waterpark')
+range(0, 9)
+  .pipe(slice.obj(1, 4, 5))
+  .on('data', console.log)
+```
+
+Expected output:
+
+    1
+    2
+    3
+    6
+    7
+    8
+
+## skip (amount\[, every\]\[, options\])
+## take (amount\[, every\]\[, options\])
+## through (\[options, \]fn(data, encoding, cb))
+## drain (\[options\])
+## console (\[options\])
+
+[any]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures
 [Number]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type
 [String]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type
 [Object]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
