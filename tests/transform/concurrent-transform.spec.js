@@ -1,5 +1,25 @@
 const tape = require('tape')
-const {range, concurrent} = require('../../')
+const {range, concurrent, pause} = require('../../')
+
+tape.only('[Concurrent] stream-pauses', t => {
+  t.plan(51)
+
+  const stream = concurrent({
+    concurrency: 7,
+    transform: (data, encoding, cb) => {
+      setTimeout(() => cb(null, data), 20)
+      // cb(null, data)
+    }
+  })
+
+  let counter = 1
+  range(1, 50)
+    .pipe(stream)
+    .pipe(pause.obj({interval: 10, duration: 1000, target: stream}))
+    .on('data', data => t.equal(data, counter, 'data arrived ' + counter++))
+    .on('finish', () => t.pass('end'))
+    .on('error', err => t.fail(err))
+})
 
 tape('[Concurrent] object stream', t => {
   let result = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -24,7 +44,7 @@ tape('[Concurrent] object stream', t => {
 tape('[Concurrent] object stream with error', t => {
   let result = [1, 2, 3]
   let count = 0
-  t.plan(2)
+  t.plan(3)
 
   range(1, 3)
     .pipe(concurrent({
@@ -46,7 +66,7 @@ tape('[Concurrent] object stream with error', t => {
       t.equal(err.message, 'foobar', 'propagates error')
     })
     .on('end', () => {
-      t.equal(result.length, 2, `Concurrent stream should end after ${count}`)
+      t.equal(result.length, 2, `Concurrent stream should end on ${count}`)
     })
 })
 
