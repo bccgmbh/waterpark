@@ -11,6 +11,7 @@ module.exports = {
   ...require('./src/transform/delay-transform'),
   ...require('./src/transform/filter-transform'),
   ...require('./src/transform/multicore-transform'),
+  ...require('./src/transform/pause-transform'),
   ...require('./src/transform/reduce-transform'),
   ...require('./src/transform/skip-transform'),
   ...require('./src/transform/slice-transform'),
