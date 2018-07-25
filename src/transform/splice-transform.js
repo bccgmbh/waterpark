@@ -5,7 +5,7 @@ module.exports.splice = (start, skip, insert, every, options) => {
     ...options,
     objectMode: true,
     transform (data, encoding, cb) {
-
+      cb(new Error('Not yet implemented!'))
     }
   })
 }
