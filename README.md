@@ -30,6 +30,8 @@ range(0, 100)
 
 **Buffer Mode**: stream with `objectMode: false`
 
+Waterpark streams default to objectMode (exception: `fromBuffer`).
+
 **Types**: R = Readable, T = Transform, W = Writable, D = Duplex
 
 | Name                               | Type | Object Mode | Buffer Mode |
