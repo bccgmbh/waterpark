@@ -6,7 +6,6 @@ const {Readable} = require('stream')
 class FromBufferReader extends Readable {
   constructor (buf, options = {}) {
     if (!Buffer.isBuffer(buf)) throw new TypeError('Expecting Buffer!')
-    options.objectMode = false
     super(options)
     this.buf = buf
     this.index = 0

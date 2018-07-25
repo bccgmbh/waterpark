@@ -36,7 +36,7 @@ Waterpark streams default to objectMode (exception: `fromBuffer`).
 |:-----------------------------------|:----:|:-----------:|:-----------:|
 | [count](#count-options)            | R    | &#10003;    | &#10003;    |
 | [fromArray](#fromarray-options)    | R    | &#10003;    | &#10003;    |
-| [fromBuffer](#frombuffer-options)  | R    | &#8208;     | &#10003;    |
+| [fromBuffer](#frombuffer-options)  | R    | &#10003;    | &#10003;    |
 | [interval](#interval-options)      | R    | &#10003;    | &#10003;    |
 | [random](#random-options)          | R    | &#10003;    | &#10003;    |
 | [range](#range-options)            | R    | &#10003;    | &#8208;     |
