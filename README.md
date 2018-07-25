@@ -11,8 +11,6 @@ While working with streams, these basic operations will ease your life.
 
     npm i waterpark
 
-In `some-file.js`
-
 ```javascript
 const {range, skip, reduce} = require('waterpark')
 
@@ -36,6 +34,7 @@ Waterpark streams default to objectMode (exception: `fromBuffer`).
 
 | Name                               | Type | Object Mode | Buffer Mode |
 |:-----------------------------------|:----:|:-----------:|:-----------:|
+| [count](#count-options)            | R    | &#10003;    | &#10003;    |
 | [fromArray](#fromarray-options)    | R    | &#10003;    | &#10003;    |
 | [fromBuffer](#frombuffer-options)  | R    | &#8208;     | &#10003;    |
 | [interval](#interval-options)      | R    | &#10003;    | &#10003;    |
@@ -52,10 +51,31 @@ Waterpark streams default to objectMode (exception: `fromBuffer`).
 | [through](#through)                | T    | &#10003;    | &#10003;    |
 | [drain](#drain)                    | W    | &#10003;    | &#10003;    |
 
+## count (options)
+* `offset` <number> (default = 0) offset will be the first number emitted.
+* ...`options` <[ReadableOptions]> options for a readable stream.
+* Returns: <[Readable]> supporting object mode &#10003; | buffer mode &#10003;
+
+Creates a readable stream emitting incrementing numbers.
+
+**Example**
+
+```javascript
+const {count} = require('waterpark')
+count().on('data', console.log)
+```
+
+Expected output:
+
+    0
+    1
+    2
+    ...
+
 ## fromArray (options)
 * `array` <[Array]> source for the readable stream
 * ...`options` <[ReadableOptions]> options for a readable stream.
-* Returns: <[Readable]> supporting objec mode &#10003; | buffer mode &#10003;
+* Returns: <[Readable]> supporting object mode &#10003; | buffer mode &#10003;
 
 Creates a readable stream form an array.
 
@@ -79,7 +99,7 @@ Expected output:
 ## fromBuffer (options)
 * `buffer` <[Buffer]> source for the readable stream
 * ...`options` <[ReadableOptions]> options for a readable stream.
-* Returns: <[Readable]> supporting objec mode &#10007; | buffer mode &#10003;
+* Returns: <[Readable]> supporting object mode &#10007; | buffer mode &#10003;
 
 Creates a readable stream form a buffer.
 
