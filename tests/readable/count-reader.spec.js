@@ -1,7 +1,7 @@
 const tape = require('tape')
 const {count} = require('../..')
 
-tape.only('count in object mode', t => {
+tape('count in object mode', t => {
   t.plan(100 + 2)
   const offset = -20
   let counter = offset
