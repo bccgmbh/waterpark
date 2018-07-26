@@ -8,6 +8,15 @@ function slice ({begin, end, every, ...options} = {}) {
   every = every || Number.POSITIVE_INFINITY
   let offset = 0
 
+  // slice ({begin: 10, end: 20, every: 30})
+  // 0         10        20        30        40        50        60...
+  // |xxxxxxxxx|+++++++++|xxxxxxxxx|xxxxxxxxx|+++++++++|xxxxxxxxx|
+  //           ^begin    ^end      ^every    ^begin    ^end      ^every
+  //                 ============================
+  // chunk:  =
+  // ignore: x
+  // stream: +
+
   return new Transform({
     ...options,
     objectMode: false,
