@@ -28,3 +28,11 @@ tape('[RangeReader] Finite range stream counting backwards', t => {
       t.ok(true, 'Finite range reader should terminate as expected')
     })
 })
+
+tape('[RangeReader] Finite range buffer stream', t => {
+  let counter = 1
+  t.plan(9)
+  range.buf(1, 8)
+    .on('data', buffer => t.equal(buffer.readIntBE(0, range.BUFFER_SIZE), counter++, 'emitted number as buffer ' + buffer.toString('hex')))
+    .on('end', () => t.pass('stream ends'))
+})

@@ -22,8 +22,6 @@ module.exports = {
   ...require('./src/transform/rollingavg-transform'),
 
   // Writer
-  ...require('./src/writable/console-writer'),
-  ...require('./src/writable/null-writer'),
 
   // Duplex
   ...require('./src/duplex/compose-duplex')

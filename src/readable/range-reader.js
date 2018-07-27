@@ -5,12 +5,13 @@ const {Readable} = require('stream')
  * ObjectMode will be set to true.
  */
 class RangeReader extends Readable {
-  constructor ({from = 0, to = Number.POSITIVE_INFINITY, ...options}) {
-    options.objectMode = true
-    super(options)
+  constructor ({from = 0, to = Number.POSITIVE_INFINITY, objectMode = true, ...options} = {}) {
+    super({objectMode, ...options})
     this.current = from
     // direction aware step and break condition
-    this.step = (from <= to) ? () => this.current++ : () => this.current--
+    this.step = (from <= to)
+      ? objectMode ? () => this.current++ : () => numberToIntBEBuffer(this.current++)
+      : objectMode ? () => this.current-- : () => numberToIntBEBuffer(this.current--)
     this.condition = (from <= to) ? () => this.current <= to : () => this.current >= to
   }
 
@@ -23,6 +24,28 @@ class RangeReader extends Readable {
   }
 }
 
+function range (from, to, options) {
+  if (typeof from === 'object') {
+    return new RangeReader(from)
+  }
+  return new RangeReader({from, to, ...options})
+}
+
+range.buf = (from, to, options) => {
+  if (typeof from === 'object') {
+    return new RangeReader({...from, objectMode: false})
+  }
+  return new RangeReader({from, to, ...options, objectMode: false})
+}
+
+range.BUFFER_SIZE = 6
+
+function numberToIntBEBuffer (num) {
+  const buf = Buffer.allocUnsafe(6)
+  buf.writeIntBE(num, 0, 6)
+  return buf
+}
+
 /**
  * Shorthand factory for RangeReader
  * @param {number} from MUST be an integer
@@ -31,13 +54,5 @@ class RangeReader extends Readable {
  */
 module.exports = {
   RangeReader,
-  range: (from, to, options) => {
-    if (
-      arguments.length === 1 &&
-      typeof from === 'object'
-    ) {
-      return new RangeReader(from)
-    }
-    return new RangeReader({from, to, ...options})
-  }
+  range
 }

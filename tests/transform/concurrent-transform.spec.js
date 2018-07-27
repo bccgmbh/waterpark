@@ -123,3 +123,21 @@ tape('[Concurrent] schuffeled results', t => {
       t.equal(result.length, 0, `Concurrent stream should end`)
     })
 })
+
+tape('[Concurrent] buffer stream', t => {
+  t.plan(9)
+  const start = Date.now()
+  range(1, 8, {objectMode: false})
+    .pipe(concurrent({
+      concurrency: 4,
+      transform: function (data, encoding, cb) {
+        setTimeout(() => cb(null, data), 100)
+      }
+    }))
+    .on('data', data => {
+      t.ok(Buffer.isBuffer(data), 'Buffer streamed concurrently ' + data.toString('hex'))
+    })
+    .on('end', () => {
+      t.ok(Date.now() - start < 300, 'buffers processed concurrently')
+    })
+})

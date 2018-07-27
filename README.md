@@ -39,9 +39,9 @@ Waterpark streams default to objectMode (exception: `fromBuffer`).
 | [fromBuffer](#frombuffer-options)  | R    | &#10003;    | &#10003;    |
 | [interval](#interval-options)      | R    | &#10003;    | &#10003;    |
 | [random](#random-options)          | R    | &#10003;    | &#10003;    |
-| [range](#range-options)            | R    | &#10003;    | &#8208;     |
+| [range](#range-options)            | R    | &#10003;    | &#10003;    |
 | [reduce](#reduce-options)          | R    | &#10003;    | &#8208;     |
-| [concurrent](#concurrent-options)  | T    | &#10003;    | &#8208;     |
+| [concurrent](#concurrent-options)  | T    | &#10003;    | &#10003;    |
 | [delay](#delay-options)            | T    | &#10003;    | &#10003;    |
 | [filter](#filter-options)          | T    | &#10003;    | &#10003;    |
 | [multicore](#multicore-options)    | T    | &#10003;    | &#10003;    |
@@ -49,7 +49,6 @@ Waterpark streams default to objectMode (exception: `fromBuffer`).
 | [skip](#skip)                      | T    | &#10003;    | &#10003;    |
 | [take](#take)                      | T    | &#10003;    | &#10003;    |
 | [through](#through)                | T    | &#10003;    | &#10003;    |
-| [drain](#drain)                    | W    | &#10003;    | &#10003;    |
 
 ## count (options)
 * `offset` <number> (default = 0) offset will be the first number emitted.
@@ -201,7 +200,7 @@ Expected output:
 ## concurrent (options)
 * `concurrency` <[Number]> integer, concurrent transform operations.
 * ...`options` <[TransformOptions]> optional stream options.
-* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#8208;
+* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10003;
 
 Concurrent stream processing.
 
@@ -441,11 +440,11 @@ Expected output:
     7
     8
 
-## skip (amount\[, every\]\[, options\])
 ## take (amount\[, every\]\[, options\])
+// TODO: write docs
+
 ## through (\[options, \]fn(data, encoding, cb))
-## drain (\[options\])
-## console (\[options\])
+// TODO: write docs
 
 [any]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures
 [Number]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type
