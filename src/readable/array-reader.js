@@ -11,7 +11,7 @@ class FromArrayReader extends Readable {
   }
 
   _read (size) {
-    for (let k = 0; k < size; k++) {
+    while (size--) {
       if (this.arr.length > 0) {
         this.push(this.arr.pop())
       } else {
