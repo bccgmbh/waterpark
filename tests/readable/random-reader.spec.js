@@ -1,19 +1,27 @@
 const tape = require('tape')
-const {random} = require('../../')
+const {random, take} = require('../../')
 
 // const DEFAULT_HIGH_WATERMARK = 16384
 
-tape('[RandomReader] default random number stream', t => {
-  let count = 10
-  t.plan(count)
-  const rr = random()
+tape('[RandomReader] default random hex stream', t => {
+  t.plan(9)
+  random()
+    .pipe(take.obj(8))
     .on('data', data => {
-      t.equal(typeof data, 'number', 'random number ' + data)
-      if (--count < 1) {
-        rr.pause()
-        rr.destroy()
-      }
+      t.equal(typeof data, 'string', 'random string ' + data)
     })
+    .on('end', () => t.pass('END'))
+})
+
+tape('[RandomReader] random hex stream with fixed chunk length', t => {
+  t.plan(9)
+  random(5)
+    .pipe(take.obj(4))
+    .on('data', data => {
+      t.equal(typeof data, 'string', 'random string ' + data)
+      t.equal(data.length, 5, 'fixed string length')
+    })
+    .on('end', () => t.pass('END'))
 })
 
 tape('[RandomReader] default random buffer stream', t => {
