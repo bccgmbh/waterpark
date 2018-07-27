@@ -4,7 +4,6 @@ class IntervalReader extends Readable {
   constructor (interval, options = {}) {
     super(options)
     this.handle = setInterval(() => {
-      // console.log('[IntervalReader] setIntervall.cb ' + Date.now())
       this.push(Date.now().toString())
     }, interval)
   }
