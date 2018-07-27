@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {random, drain, drainObjects, range} = require('../../')
+const {random, take, drain, drainObjects, range} = require('../../')
 
 tape('[NullWriter] consume an object stream', t => {
   t.plan(1)
@@ -14,7 +14,8 @@ tape('[NullWriter] consume an object stream', t => {
 })
 tape('[NullWriter] consume a buffer stream', t => {
   t.plan(1)
-  random(30)
+  random.buf()
+    .pipe(take(30))
     .pipe(drain())
     .on('data', data => {
       t.fail('NullWriter should not emit data events')

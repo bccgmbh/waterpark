@@ -43,7 +43,7 @@ Waterpark streams default to objectMode (exception: `fromBuffer`).
 | [reduce](#reduce-options)          | R    | &#10003;    | &#8208;     |
 | [concurrent](#concurrent-options)  | T    | &#10003;    | &#8208;     |
 | [delay](#delay-options)            | T    | &#10003;    | &#10003;    |
-| [filter](#filter-options)          | T    | &#10003;    | &#8208;     |
+| [filter](#filter-options)          | T    | &#10003;    | &#10003;    |
 | [multicore](#multicore-options)    | T    | &#10003;    | &#10003;    |
 | [slice](#slice)                    | T    | &#10003;    | &#10003;    |
 | [skip](#skip)                      | T    | &#10003;    | &#10003;    |

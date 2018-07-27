@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, through, throughBuffer, throughPromise, random} = require('../../')
+const {range, take, through, throughBuffer, throughPromise, random} = require('../../')
 
 // const DEFAULT_HIGH_WATERMARK = 16384
 
@@ -17,16 +17,13 @@ tape('[Through] object stream', t => {
 
 tape('[Through] buffer stream', t => {
   t.plan(4)
-  const highWatermarkOptions = {highWaterMark: 10}
-  // const ENCODING = 'utf8'
-  random(30, null, highWatermarkOptions)
-  // .on('data', (data:Buffer) => console.log('[TEST:INVARIANT] RandomReader DATA', data))
-    .pipe(throughBuffer(highWatermarkOptions, (data, encoding, cb) => {
+  const highWaterMark = 10
+  random.buf({highWaterMark})
+    .pipe(throughBuffer((data, encoding, cb) => {
       cb(null, data)
     }))
-    .on('data', data => {
-      t.equal(data.length, highWatermarkOptions.highWaterMark, 'Through buffer has correct size')
-    })
+    .pipe(take(30))
+    .on('data', data => t.equal(data.length, highWaterMark, 'Through buffer has correct size'))
     .on('end', () => t.ok(true, 'Through buffer stream should end'))
 })
 

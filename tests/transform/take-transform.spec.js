@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, take} = require('../../')
+const {range, fromBuffer, take} = require('../../')
 
 tape('[Take] object stream', t => {
   const result = [1, 2, 3]
@@ -29,6 +29,17 @@ tape('[Take] one every 3rd object', t => {
     .pipe(take.obj(1, 3))
     .on('data', data => {
       t.equal(data, result.shift(), `object ${data} passed`)
+    })
+    .on('end', () => t.ok(true, 'Take object stream should end'))
+})
+
+tape('[Take] only 5 bytes from finite stream', t => {
+  const result = Buffer.from('12345')
+  t.plan(2)
+  fromBuffer(Buffer.from('123456789'))
+    .pipe(take(5))
+    .on('data', data => {
+      t.ok(data.equals(result), `object ${data} passed`)
     })
     .on('end', () => t.ok(true, 'Take object stream should end'))
 })
