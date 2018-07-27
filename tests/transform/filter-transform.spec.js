@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, filter} = require('../../')
+const {range, fromBuffer, filter} = require('../../')
 
 tape('[Filter] object stream', t => {
   let result = [1, 3, 5]
@@ -11,4 +11,15 @@ tape('[Filter] object stream', t => {
       t.equal(data, result.shift(), `filtered odd numbers ${data}`)
     })
     .on('end', () => t.ok(true, 'Filter stream should end'))
+})
+
+tape('[Filter] buffer stream', t => {
+  t.plan(2)
+  const source = Buffer.from('020801', 'hex')
+  const result = ['02', '01'].map(str => Buffer.from(str, 'hex'))
+  fromBuffer(source, {highWaterMark: 1})
+    .pipe(filter({
+      filter: (buffer) => buffer[0] < 4
+    }))
+    .on('data', buffer => t.ok(buffer.equals(result.shift()), 'buffer stream filtered ' + buffer.toString('hex')))
 })
