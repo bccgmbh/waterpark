@@ -32,28 +32,28 @@ Waterpark streams default to objectMode (exception: `fromBuffer`).
 
 **Types**: R = Readable, T = Transform, W = Writable, D = Duplex
 
-| Name                               | Type | Object Mode | Buffer Mode |
-|:-----------------------------------|:----:|:-----------:|:-----------:|
-| [count](#count-options)            | R    | &#10003;    | &#10003;    |
-| [fromArray](#fromarray-options)    | R    | &#10003;    | &#10003;    |
-| [fromBuffer](#frombuffer-options)  | R    | &#10003;    | &#10003;    |
-| [interval](#interval-options)      | R    | &#10003;    | &#10003;    |
-| [random](#random-options)          | R    | &#10003;    | &#10003;    |
-| [range](#range-options)            | R    | &#10003;    | &#10003;    |
-| [reduce](#reduce-options)          | R    | &#10003;    | &#8208;     |
-| [concurrent](#concurrent-options)  | T    | &#10003;    | &#10003;    |
-| [delay](#delay-options)            | T    | &#10003;    | &#10003;    |
-| [filter](#filter-options)          | T    | &#10003;    | &#10003;    |
-| [multicore](#multicore-options)    | T    | &#10003;    | &#10003;    |
-| [slice](#slice)                    | T    | &#10003;    | &#10003;    |
-| [skip](#skip)                      | T    | &#10003;    | &#10003;    |
-| [take](#take)                      | T    | &#10003;    | &#10003;    |
-| [through](#through)                | T    | &#10003;    | &#10003;    |
+| Name                               | Type | Object Mode | Buffer Mode | Shorthand
+|:-----------------------------------|:----:|:-----------:|:-----------:|:----------
+| [concurrent](#concurrent-options)  | T    | &#10003;    | &#10003;    | concurrent (concurrency, transformHandler, options)
+| [count](#count-options)            | R    | &#10003;    | &#10003;    | count (offset, options)
+| [delay](#delay-options)            | T    | &#10003;    | &#10003;    | delay (milliseconds, jitter, options)
+| [filter](#filter-options)          | T    | &#10003;    | &#10003;    | filter (filterHandler, options)
+| [fromArray](#fromarray-options)    | R    | &#10003;    | &#10003;    | fromArray (array, options)
+| [fromBuffer](#frombuffer-options)  | R    | &#10003;    | &#10003;    | fromBuffer (buffer, options)
+| [interval](#interval-options)      | R    | &#10003;    | &#8208;     | interval (milliseconds, options)
+| [multicore](#multicore-options)    | T    | &#10003;    | &#10003;    | multicore (cores, path, options)
+| [random](#random-options)          | R    | &#10003;    | &#10003;    | random (size, options)
+| [range](#range-options)            | R    | &#10003;    | &#10003;    | range (from, to, options)
+| [reduce](#reduce-options)          | R    | &#10003;    | &#8208;     | reduce (options, fn, initialValue, repeatAfter)
+| [slice](#slice)                    | T    | &#10003;    | &#10003;    | slice (begin, end, every, options)
+| [skip](#skip)                      | T    | &#10003;    | &#10003;    | skip (begin, every, options)
+| [take](#take)                      | T    | &#10003;    | &#10003;    | take (amount, every, options)
+| [through](#through)                | T    | &#10003;    | &#10003;    | through (fn, options)
 
 ## count (options)
 * `offset` <number> (default = 0) offset will be the first number emitted.
 * ...`options` <[ReadableOptions]> options for a readable stream.
-* Returns: <[Readable]> supporting object mode &#10003; | buffer mode &#10003;
+* Returns: <[Readable]>
 
 Creates a readable stream emitting incrementing numbers.
 
@@ -121,13 +121,12 @@ Expected output:
 ## interval (options)
 * `interval` <[Number]> interval in milliseconds
 * ...`options` <[ReadableOptions]> options for a readable stream.
-* Returns: <[Readable]> supporting object mode &#10003; | buffer mode &#10003;
+* Returns: <[Readable]> supporting object mode &#10003; | buffer mode &#10007;
 
-Periodically emits elements.
+Periodically emits the current unix timestamp.
 
-Internally **interval** is using [setInterval]. So, regarding temporal
-precision a jitter as well as drift is to be expected within the order
-of milliseconds.
+Internally **interval** is using [setInterval]. Temporal jitter as
+well as drift within the order of milliseconds might occur.
 
 **Example**
 
@@ -146,12 +145,11 @@ Expected output:
     ...
 
 ## random (options)
-* `size` <[Number]> In object mode: A positive number of random strings.
-    In buffer mode: number of random bytes.
+* `size` <[Number]> length of emitted strings.
 * ...`options` <[ReadableOptions]> options for a readable stream.
 * Returns: <[Readable]> supporting object mode &#10003; | buffer mode &#10003;
 
-Emits random strings / buffers with a given size.
+Emits random hex-encoded strings / buffers with a given size.
 
 **Example**
 
@@ -281,19 +279,19 @@ The inital range 1 to 5 is filtered for odd numbers
 Stream operations in parallel on multiple cores. &#9733;
 
 Forks the module referenced by `path`, `core` times, spreads the
-previous stream data to these child processes and collects their
-digests while preserving order.
+previous stream data to these child processes, computes their transform
+handlers in parallel and collects their digests while preserving order.
 
 Communication between the main process and child processes is done via
-JSON encoding. Include serialization / deserialization of message sent
-to the worker and back into your performance estimation.
+JSON encoding. Include serialization and deserialization of data that
+needs to be communicated to the worker and back into your performance 
+estimation.
 If your work is mostly I/O bound you might be looking for
-[parallel-transform] which is used in `multicore` as scheduler.
+[concurrent](#concurrent-options) which is used in `multicore` as scheduler.
 
 For optimal performance, use the number of [physical cores](https://nodejs.org/api/os.html#os_os_cpus).
 Exceeding that amount is possible on machines with hyper
-threading, but if the operation is cpu bound (not I/O bound)
-performance will decrease due to thrashing.
+threading, yet might yield actually less performance due to thrashing.
 
 **Example**
 
@@ -304,10 +302,7 @@ SHA256 hash of multiple messages.
 ```javascript
 const {range, multicore} = require('waterpark')
 range(1, 12)
-  .pipe(multicore({
-    path: require.resolve('./worker.js'),
-    cores: 4
-  }))
+  .pipe(multicore(4, require.resolve('./worker.js')))
   .on('data', console.log)
 ```
 
@@ -334,7 +329,9 @@ Expected output:
     ...
 
 Each line represents the outcome of a CPU intense calculation.
-
+`range` runs on the main process and sequentially pipes numbers 
+into 4 child process each running on a separate core which are 
+therefore able to calculate the expensive hash function in parallel.
 
 ## slice (options)
 * `begin` <[Number]> zero based index at which to begin extraction.
@@ -463,4 +460,3 @@ Expected output:
 [DuplexOptions]: https://nodejs.org/api/stream.html#stream_new_stream_duplex_options
 
 [setInterval]: https://nodejs.org/api/timers.html#timers_setinterval_callback_delay_args
-[parallel-transform]: https://www.npmjs.com/package/parallel-transform

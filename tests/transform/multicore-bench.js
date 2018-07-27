@@ -6,7 +6,7 @@ module.exports = (cores) => {
   return tape(`[MulticoreTransform] Benchmark MulticoreTransform with ${cores}x core`, t => {
     const startTime = Date.now()
     range(1, 12)
-      .pipe(multicore(worker, cores))
+      .pipe(multicore(cores, worker))
       .pipe(through((data, encoding, cb) => {
         cb()
       }))

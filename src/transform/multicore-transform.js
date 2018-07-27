@@ -1,7 +1,7 @@
 const {fork} = require('child_process')
 const {concurrent} = require('./concurrent-transform')
 
-module.exports.multicore = (path, cores = 1, options = {}) => {
+module.exports.multicore = (cores, path, options = {}) => {
   const children = []
 
   for (let i = 0; i < cores; i++) {
