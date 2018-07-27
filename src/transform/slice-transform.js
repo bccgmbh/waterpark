@@ -1,24 +1,24 @@
 const {Transform} = require('stream')
 
-// Slice bytes (buffer mode)
+// Buffer Mode
+
+// slice ({begin: 10, end: 20, every: 30})
+// 0         10        20        30        40        50        60...
+// |xxxxxxxxx|+++++++++|xxxxxxxxx|xxxxxxxxx|+++++++++|xxxxxxxxx|
+//           ^begin    ^end      ^every    ^begin    ^end      ^every
+//                 ============================
+// ^prev_1         ^offset       ^prev_2       ^offset + chunk.length
+//
+// chunk:  =
+// ignore: x
+// stream: +
+
 function slice ({begin, end, every, ...options} = {}) {
   if (options.objectMode) return slice.obj(...arguments)
   begin = begin || 0
   end = end || Number.POSITIVE_INFINITY
   every = every || Number.POSITIVE_INFINITY
   let offset = 0
-
-  // slice ({begin: 10, end: 20, every: 30})
-  // 0         10        20        30        40        50        60...
-  // |xxxxxxxxx|+++++++++|xxxxxxxxx|xxxxxxxxx|+++++++++|xxxxxxxxx|
-  //           ^begin    ^end      ^every    ^begin    ^end      ^every
-  //                 ============================
-  // ^prev_1         ^offset       ^prev_2       ^offset + chunk.length
-  //
-  // chunk:  =
-  // ignore: x
-  // stream: +
-
   return new Transform({
     ...options,
     objectMode: false,
@@ -40,7 +40,7 @@ function slice ({begin, end, every, ...options} = {}) {
         cursor = Math.min(prev + every, offset + chunk.length)
       }
       offset += chunk.length
-      if (every === Number.POSITIVE_INFINITY && offset > end) {
+      if (every === Number.POSITIVE_INFINITY && offset >= end) {
         return this.push(null)
       }
       next()
@@ -48,7 +48,8 @@ function slice ({begin, end, every, ...options} = {}) {
   })
 }
 
-// Slice objects (object mode)
+// Object Mode
+
 slice.obj = function ({begin, end, every, ...options} = {}) {
   options.objectMode = true
   begin = begin || 0
@@ -63,13 +64,12 @@ slice.obj = function ({begin, end, every, ...options} = {}) {
       const idx = index++ % every
       // console.log('[Slice] idx %d, end %d, data %s', idx, end, data)
       if (begin <= idx && idx < end) {
-        next(null, data)
-      } else {
-        next(null)
+        this.push(data)
       }
       if (every === Number.POSITIVE_INFINITY && index === end) {
-        process.nextTick(() => this.destroy())
+        return this.push(null)
       }
+      next()
     },
     ...options
   })
