@@ -13,6 +13,8 @@ function slice ({begin, end, every, ...options} = {}) {
   // |xxxxxxxxx|+++++++++|xxxxxxxxx|xxxxxxxxx|+++++++++|xxxxxxxxx|
   //           ^begin    ^end      ^every    ^begin    ^end      ^every
   //                 ============================
+  // ^prev_1         ^offset       ^prev_2       ^offset + chunk.length
+  //
   // chunk:  =
   // ignore: x
   // stream: +
@@ -21,29 +23,27 @@ function slice ({begin, end, every, ...options} = {}) {
     ...options,
     objectMode: false,
     transform (chunk, encoding, next) {
-      let consumed = 0
-      let idx = offset % every
-      while (consumed < chunk.length) {
-        // const buf = chunk.slice(cursor, cursor + every)
-        // cursor += every
-
-        const from = Math.max(0, begin + consumed - idx)
-        const to = Math.max(0, end + consumed - idx)
-
-        // Values for next round
-        offset += Math.min(chunk.length, every)
-        consumed += Math.min(chunk.length, every)
-        idx = offset % every
-        console.log('[Slice] begin %d, end %d, every %d, idx %d, chunk %s', from, to, every, idx, chunk)
-        this.push(chunk.slice(from, to))
+      let cursor = offset
+      while (cursor < offset + chunk.length) {
+        const prev = cursor - cursor % every
+        const from = Math.max(cursor, prev + begin) - offset
+        const to = Math.min(prev + end, offset + chunk.length) - offset
+        // console.log('[Slice] [%s (%s - %s) %s]',
+        //   offset.toString().padStart(8),
+        //   (offset + from).toString().padStart(8),
+        //   (offset + to - 1).toString().padStart(8),
+        //   (offset + chunk.length - 1).toString().padStart(8)
+        // )
+        if (from < to) {
+          this.push(chunk.slice(from, to))
+        }
+        cursor = Math.min(prev + every, offset + chunk.length)
       }
-      // const consumed = buf.length - end
+      offset += chunk.length
+      if (every === Number.POSITIVE_INFINITY && offset > end) {
+        return this.push(null)
+      }
       next()
-      // console.log('[Slice] ', chunk)
-      // if (idx < begin) {
-
-      // }
-      // next(null, chunk)
     }
   })
 }

@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, slice} = require('../../')
+const {range, random, slice} = require('../../')
 const {PassThrough} = require('stream')
 
 tape('[Slice] invariant objects', t => {
@@ -92,7 +92,7 @@ tape('[Slice] skip 5 bytes then take 2 bytes', t => {
   }])
 })
 
-tape('Slice skip 2 bytes every 5 bytes', t => {
+tape('[Slice] skip 2 bytes every 5 bytes', t => {
   deepCheckScenarios(t, {begin: 2, end: 4, every: 5}, [{
     name: 'single buffer',
     provided: ['0123456789'],
@@ -102,6 +102,14 @@ tape('Slice skip 2 bytes every 5 bytes', t => {
     provided: ['0', '12', '3456789'],
     expected: ['2', '3', '78']
   }])
+})
+
+tape('[Slice] slice finite sequence from continuous stream', t => {
+  t.plan(6)
+  random.buf({highWaterMark: 4}) // emits buffers of length 4
+    .pipe(slice({begin: 2, end: 18}))
+    .on('data', data => t.ok(Buffer.isBuffer(data), 'emits buffer'))
+    .on('end', () => t.pass('Stream ends after slice'))
 })
 
 function deepCheckScenarios (t, options, scenarios) {
