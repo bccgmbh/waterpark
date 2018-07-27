@@ -1,6 +1,6 @@
 const {Readable} = require('stream')
 
-const count = ({offset = 0, ...options}) => {
+const count = ({offset = 0, ...options} = {}) => {
   return new Readable({
     ...options,
     objectMode: true,
@@ -16,7 +16,7 @@ const count = ({offset = 0, ...options}) => {
  * @param offset {number} between -2147483647 and 2147483647
  * @param options
  */
-count.buf = ({offset = 0, ...options}) => {
+count.buf = ({offset = 0, ...options} = {}) => {
   return new Readable({
     ...options,
     objectMode: false,
