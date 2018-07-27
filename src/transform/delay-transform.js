@@ -21,7 +21,7 @@ module.exports = {
     options.objectMode = true
     return new DelayTransform(milliseconds, jitter, options)
   },
-  delayBuffer: (milliseconds, jitter, options) => {
+  delayBuffer: (milliseconds, jitter, options = {}) => {
     options.objectMode = false
     return new DelayTransform(milliseconds, jitter, options)
   }
