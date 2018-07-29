@@ -4,13 +4,13 @@ const {PassThrough} = require('stream')
 
 tape('[Slice] invariant objects', t => {
   const result = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-  checkResults(range(0, 9).pipe(slice.obj()), t, result)
+  checkResults(range(0, 9).pipe(slice()), t, result)
 })
 
 tape('[Slice] skip 5 objects', t => {
   const result = [5, 6, 7, 8, 9]
   range(0, 9)
-    .pipe(slice.obj({begin: 5}))
+    .pipe(slice({begin: 5}))
     .on('data', data => {
       t.equal(data, result.shift(), `sliced data passed ${data}`)
     })
@@ -20,7 +20,7 @@ tape('[Slice] skip 5 objects', t => {
 tape('[Slice] take 3 objects', t => {
   const result = [0, 1, 2]
   range(0, 9)
-    .pipe(slice.obj({end: 3}))
+    .pipe(slice({end: 3}))
     .on('data', data => {
       t.equal(data, result.shift(), `sliced data passed ${data}`)
     })
@@ -35,11 +35,7 @@ tape('[Slice] begin 1, end 3, every 5 objects', t => {
   const result = [1, 2, 6, 7]
 
   range(0, 9)
-    .pipe(slice.obj({
-      begin: 1,
-      end: 3,
-      every: 5
-    }))
+    .pipe(slice(1, 3, 5))
     .on('data', data => {
       t.equal(data, result.shift(), `sliced data passed ${data}`)
     })
@@ -56,7 +52,7 @@ tape('Slice invariant bytes', t => {
   }])
 })
 
-tape('Slice', t => {
+tape('[Slice] skip 3', t => {
   deepCheckScenarios(t, {begin: 3}, [{
     name: 'skip 3 bytes form single buffer',
     provided: ['0123456789'],
@@ -107,7 +103,7 @@ tape('[Slice] skip 2 bytes every 5 bytes', t => {
 tape('[Slice] slice finite sequence from continuous stream', t => {
   t.plan(6)
   random.buf({highWaterMark: 4}) // emits buffers of length 4
-    .pipe(slice({begin: 2, end: 18}))
+    .pipe(slice.buf({begin: 2, end: 18}))
     .on('data', data => t.ok(Buffer.isBuffer(data), 'emits buffer'))
     .on('end', () => t.pass('Stream ends after slice'))
 })
@@ -118,7 +114,7 @@ function deepCheckScenarios (t, options, scenarios) {
     scenario.expected = scenario.expected.map(Buffer.from)
     t.test(scenario.name, st => {
       const reader = new PassThrough()
-      const stream = reader.pipe(slice(options))
+      const stream = reader.pipe(slice.buf(options))
       deepCheckResults(stream, st, scenario.expected)
       scenario.provided.map(buffer => reader.push(buffer))
     })

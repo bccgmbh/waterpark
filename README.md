@@ -12,7 +12,7 @@ While working with streams, these basic operations will ease your life.
     npm i waterpark
 
 ```javascript
-const {range, skip, reduce} = require('waterpark')
+const {range, take, reduce} = require('waterpark')
 
 // sum even numbers from 0 to 100
 range(0, 100)

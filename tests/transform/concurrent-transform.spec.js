@@ -4,18 +4,14 @@ const {range, concurrent, pause} = require('../../')
 tape('[Concurrent] stream-pauses', t => {
   t.plan(51)
 
-  const stream = concurrent({
-    concurrency: 7,
-    transform: (data, encoding, cb) => {
-      setTimeout(() => cb(null, data), 20)
-      // cb(null, data)
-    }
+  const stream = concurrent(7, (data, encoding, cb) => {
+    setTimeout(() => cb(null, data), 20)
   })
 
   let counter = 1
   range(1, 50)
     .pipe(stream)
-    .pipe(pause.obj({interval: 10, duration: 100, target: stream}))
+    .pipe(pause({interval: 10, duration: 100, target: stream}))
     .on('data', data => t.equal(data, counter, 'data arrived ' + counter++))
     .on('end', () => t.pass('end'))
     .on('error', err => t.fail(err))
@@ -75,11 +71,8 @@ tape('[Concurrent] synchronous transformation', t => {
   t.plan(6)
 
   range(1, 5)
-    .pipe(concurrent({
-      concurrency: 2,
-      transform: function (data, encoding, cb) {
-        cb(null, data)
-      }
+    .pipe(concurrent(2, function (data, encoding, cb) {
+      cb(null, data)
     }))
     .on('data', data => {
       t.equal(data, result.shift(), `data is passed concurrently ${data}`)
@@ -127,8 +120,8 @@ tape('[Concurrent] schuffeled results', t => {
 tape('[Concurrent] buffer stream', t => {
   t.plan(9)
   const start = Date.now()
-  range(1, 8, {objectMode: false})
-    .pipe(concurrent({
+  range.buf(1, 8)
+    .pipe(concurrent.buf({
       concurrency: 4,
       transform: function (data, encoding, cb) {
         setTimeout(() => cb(null, data), 100)

@@ -1,17 +1,14 @@
 const tape = require('tape')
-const {count} = require('../..')
+const {count, take} = require('../..')
 
 tape('count in object mode', t => {
-  t.plan(100 + 2)
+  t.plan(100 + 1)
   const offset = -20
   let counter = offset
-  const stream = count({offset})
+  count(offset)
+    .pipe(take(100))
     .on('data', data => {
-      t.equal(data, counter, 'counting ' + data)
-      counter++
-      if (counter >= (100 + offset)) {
-        stream.destroy()
-      }
+      t.equal(data, counter++, 'counting ' + data)
     })
     .on('end', () => t.ok(true, 'Stream ends'))
 })
@@ -19,16 +16,14 @@ tape('count in object mode', t => {
 tape('count in buffer mode', t => {
   const max = 100
   const offset = 2147483600
-  t.plan(max + 2)
+  t.plan(max + 1)
   let counter = offset - 1
-  const stream = count.buf({offset})
+  count.buf(offset)
+    .pipe(take.buf(6 * 100))
     .on('data', data => {
-      const actual = data.readInt32BE(0)
-      t.ok([1, -0xFFFFFFFE].indexOf(actual - counter) >= 0, 'counting ' + data.toString('hex') + ' => ' + actual)
+      const actual = data.readIntBE(0, 6)
+      t.ok(actual - counter === 1, 'counting ' + data.toString('hex') + ' => ' + actual)
       counter = actual
-      if (counter === (max + offset + 0x7fffffff) % 0x80000000 - 0x7fffffff) {
-        stream.destroy()
-      }
     })
     .on('end', () => t.ok(true, 'Stream ends'))
 })

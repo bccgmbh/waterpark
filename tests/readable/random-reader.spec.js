@@ -6,7 +6,7 @@ const {random, take} = require('../../')
 tape('[RandomReader] default random hex stream', t => {
   t.plan(9)
   random()
-    .pipe(take.obj(8))
+    .pipe(take(8))
     .on('data', data => {
       t.equal(typeof data, 'string', 'random string ' + data)
     })
@@ -16,7 +16,7 @@ tape('[RandomReader] default random hex stream', t => {
 tape('[RandomReader] random hex stream with fixed chunk length', t => {
   t.plan(9)
   random(5)
-    .pipe(take.obj(4))
+    .pipe(take(4))
     .on('data', data => {
       t.equal(typeof data, 'string', 'random string ' + data)
       t.equal(data.length, 5, 'fixed string length')

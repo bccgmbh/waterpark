@@ -21,7 +21,20 @@ class FromBufferReader extends Readable {
   }
 }
 
-module.exports = {
-  FromBufferReader,
-  fromBuffer: (buf, options) => new FromBufferReader(buf, options)
+// call signatures
+
+function fromBuffer (buf, options = {}) {
+  if (Buffer.isBuffer(buf)) {
+    return new FromBufferReader(buf, {...options, objectMode: true})
+  }
+  return new FromBufferReader({...buf, objectMode: true})
 }
+
+fromBuffer.buf = (buf, options = {}) => {
+  if (Buffer.isBuffer(buf)) {
+    return new FromBufferReader(buf, {...options, objectMode: false})
+  }
+  return new FromBufferReader({...buf, objectMode: false})
+}
+
+module.exports = {fromBuffer}

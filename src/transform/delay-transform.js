@@ -8,21 +8,26 @@ class DelayTransform extends Transform {
   }
 
   _transform (chunk, encoding, callback) {
-    // console.log('[DelayTransform._transform] encoding %s', encoding);
     setTimeout(() => {
       callback(null, chunk)
     }, this.millis + 2 * (Math.random() - 0.5) * this.jitter)
   }
 }
 
-module.exports = {
-  DelayTransform,
-  delay: (milliseconds, jitter, options = {}) => {
-    options.objectMode = true
-    return new DelayTransform(milliseconds, jitter, options)
-  },
-  delayBuffer: (milliseconds, jitter, options = {}) => {
-    options.objectMode = false
-    return new DelayTransform(milliseconds, jitter, options)
+// Call signature
+
+function delay (milliseconds, jitter, options = {}) {
+  if (typeof milliseconds === 'number') {
+    return new DelayTransform(milliseconds, jitter, {...options, objectMode: true})
   }
+  return new DelayTransform({...milliseconds, objectMode: true})
 }
+
+delay.buf = (milliseconds, jitter, options = {}) => {
+  if (typeof milliseconds === 'number') {
+    return new DelayTransform(milliseconds, jitter, {...options, objectMode: false})
+  }
+  return new DelayTransform({...milliseconds, objectMode: false})
+}
+
+module.exports = {delay}

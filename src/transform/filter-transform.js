@@ -1,11 +1,11 @@
 const {Transform} = require('stream')
 
-function filter ({filter: fn, ...options}) {
+function filterTransform ({test, ...options}) {
   return new Transform({
     objectMode: true,
     ...options,
     transform (chunk, encoding, cb) {
-      if (fn(chunk)) {
+      if (test(chunk)) {
         this.push(chunk)
       }
       cb()
@@ -13,8 +13,20 @@ function filter ({filter: fn, ...options}) {
   })
 }
 
-filter.buf = ({filter, ...options}) => filter({filter, ...options, objectMode: false})
+// call signatures
 
-module.exports = {
-  filter
+const filter = (test, options = {}) => {
+  if (typeof test === 'function') {
+    return filterTransform({test, ...options})
+  }
+  return filterTransform(test)
 }
+
+filter.buf = (test, options) => {
+  if (typeof test === 'function') {
+    return filterTransform({test, ...options, objectMode: false})
+  }
+  return filterTransform({...test, objectMode: false})
+}
+
+module.exports = {filter}

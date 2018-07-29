@@ -15,7 +15,20 @@ class IntervalReader extends Readable {
   }
 }
 
-module.exports = {
-  IntervalReader,
-  interval: (interval, options) => new IntervalReader(interval, options)
+// call signatures
+
+const interval = (milliseconds, options = {}) => {
+  if (typeof milliseconds === 'number') {
+    return new IntervalReader(milliseconds, options)
+  }
+  return new IntervalReader(milliseconds)
 }
+
+interval.buf = (milliseconds, options = {}) => {
+  if (typeof milliseconds === 'number') {
+    return new IntervalReader(milliseconds, {...options, objectMode: false})
+  }
+  return new IntervalReader({...milliseconds, objectMode: false})
+}
+
+module.exports = {interval}

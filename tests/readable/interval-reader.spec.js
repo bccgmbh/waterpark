@@ -4,8 +4,8 @@ const {interval, take} = require('../../')
 tape('[IntervalReader] interval(100).pipe(take(3)) should porperly terminate around 300ms', t => {
   t.plan(4)
   const startTime = Date.now()
-  const ir = interval(100, {objectMode: true})
-  ir.pipe(take.obj(3))
+  const ir = interval(100)
+  ir.pipe(take(3))
     .on('data', (data) => t.ok(data, `interval emitted ${Date.now() - startTime}`))
     .on('end', () => {
       ir.destroy()
@@ -18,8 +18,8 @@ tape('[IntervalReader] interval(100).pipe(take(3)) should porperly terminate aro
 tape('[IntervalReader] should support buffer mode', t => {
   t.plan(4)
   const startTime = Date.now()
-  const ir = interval(100, {objectMode: false})
-  ir.pipe(take(13 * 3))
+  const ir = interval.buf(100)
+  ir.pipe(take.buf(13 * 3))
     .on('data', (data) => t.ok(data, `buffer emitted ${data}`))
     .on('end', () => {
       ir.destroy()

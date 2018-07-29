@@ -1,15 +1,15 @@
 const {Transform} = require('stream')
 
-function throughBuffer (options, callback) {
-  [options, callback] = normalizeCallSignature(options, callback)
-  options.transform = callback
-  return new Transform(options)
-}
-
 function through (options, callback) {
   [options, callback] = normalizeCallSignature(options, callback)
   options.transform = callback
   options.objectMode = true
+  return new Transform(options)
+}
+
+through.buf = (options, callback) => {
+  [options, callback] = normalizeCallSignature(options, callback)
+  options.transform = callback
   return new Transform(options)
 }
 
@@ -20,7 +20,7 @@ function through (options, callback) {
  * @param options
  * @param promiseFactory { function(chunk, encoding): Promise<any> }
  */
-function throughPromise (options, promiseFactory) {
+through.promise = (options, promiseFactory) => {
   [options, promiseFactory] = normalizeCallSignature(options, promiseFactory)
   options.objectMode = true
   options.transform = (chunk, encoding, cb) => {
@@ -48,7 +48,5 @@ function callbackify (promise, cb) {
 }
 
 module.exports = {
-  through,
-  throughBuffer,
-  throughPromise
+  through
 }

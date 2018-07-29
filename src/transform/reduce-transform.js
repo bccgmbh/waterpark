@@ -1,30 +1,6 @@
 const {Transform} = require('stream')
 
 /**
- * Like Array.reduce() but for buffer streams
- * @param options {object} TransformOptions
- * @param fn {Function(accumulator, currentValue, currentIndex)} reduce function
- * @param initialValue {*} Will be passed to fn as initial value for accumulator. Default: EmptyBuffer
- * @param repeatAfter {Number} Use, if it's desired to reduce segments of a stream and pipe these results.
- * When repeatAfter is used, be aware that finite streams will also push the accumulator on "end".
- * If the total amount of objects is not a natural multiple of repeatAfter, the last result might behave unexpected.
- * @return {*}
- */
-module.exports.reduce = (options = {}, fn, initialValue = 0, repeatAfter = Number.POSITIVE_INFINITY) => {
-  if (repeatAfter !== Number.POSITIVE_INFINITY &&
-    (repeatAfter <= 0 || !Number.isInteger(repeatAfter))) {
-    throw new Error('"repeatAfter" must be a Number')
-  }
-  return new Transform({
-    objectMode: false,
-    transform: (data, encoding, cb) => {
-      cb(new Error('Not yet implemented!'))
-    },
-    ...options
-  })
-}
-
-/**
  * Like Array.reduce() but for object streams
  * @param options {object} TransformOptions
  * @param fn {Function(accumulator, currentValue, currentIndex)} reduce function
@@ -34,7 +10,7 @@ module.exports.reduce = (options = {}, fn, initialValue = 0, repeatAfter = Numbe
  * If the total amount of objects is not a natural multiple of repeatAfter, the last result might behave unexpected.
  * @return {*}
  */
-module.exports.reduce.obj = (options = {}, fn, initialValue = 0, repeatAfter = Number.POSITIVE_INFINITY) => {
+function reduceObject ({reducer, initialValue = 0, repeatAfter = Number.POSITIVE_INFINITY, ...options} = {}) {
   if (repeatAfter !== Number.POSITIVE_INFINITY &&
     (repeatAfter <= 0 || !Number.isInteger(repeatAfter))) {
     throw new Error('"repeatAfter" must be a Number')
@@ -47,12 +23,12 @@ module.exports.reduce.obj = (options = {}, fn, initialValue = 0, repeatAfter = N
       transform: (data, encoding, cb) => {
         if (index < repeatAfter - 1) {
           // console.log(`[Transform] fn(${accumulator}, ${data}, ${index})`)
-          accumulator = fn(accumulator, data, index)
+          accumulator = reducer(accumulator, data, index)
           index++
           return cb()
         }
-        // console.log(`[Transform] fn(${accumulator}, ${data}, ${index})`)
-        const result = fn(accumulator, data, index)
+        // console.log(`[Transform] reducer(${accumulator}, ${data}, ${index})`)
+        const result = reducer(accumulator, data, index)
         accumulator = initialValue
         index = 0
         cb(null, result)
@@ -68,3 +44,39 @@ module.exports.reduce.obj = (options = {}, fn, initialValue = 0, repeatAfter = N
     }
   )
 }
+
+/**
+ * Like Array.reduce() but for buffer streams
+ * @param options {object} TransformOptions
+ * @param fn {Function(accumulator, currentValue, currentIndex)} reduce function
+ * @param initialValue {*} Will be passed to fn as initial value for accumulator. Default: EmptyBuffer
+ * @param repeatAfter {Number} Use, if it's desired to reduce segments of a stream and pipe these results.
+ * When repeatAfter is used, be aware that finite streams will also push the accumulator on "end".
+ * If the total amount of objects is not a natural multiple of repeatAfter, the last result might behave unexpected.
+ * @return {*}
+ */
+function reduceBuffer ({reducer, initialValue = 0, repeatAfter = Number.POSITIVE_INFINITY, ...options} = {}) {
+  if (repeatAfter !== Number.POSITIVE_INFINITY &&
+    (repeatAfter <= 0 || !Number.isInteger(repeatAfter))) {
+    throw new Error('"repeatAfter" must be a Number')
+  }
+  return new Transform({
+    objectMode: false,
+    transform: (data, encoding, cb) => {
+      cb(new Error('Not yet implemented!'))
+    },
+    ...options
+  })
+}
+
+// --- Syntactic Sugar ---
+
+function reduce (options = {}, reducer, initialValue, repeatAfter) {
+  return reduceObject({...options, reducer, initialValue, repeatAfter})
+}
+
+reduce.buf = (options = {}, reducer, initialValue, repeatAfter) => {
+  return reduceBuffer({...options, reducer, initialValue, repeatAfter})
+}
+
+module.exports = {reduce}

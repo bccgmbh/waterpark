@@ -18,7 +18,7 @@ tape('[ArrayReader] in "buffer mode"', t => {
   const result = [1, 2, 3].map(n => Buffer.from(n.toString(10)))
   const arr = ['1', '2', '3']
   t.plan(arr.length * 2 + 1)
-  fromArray(arr, {objectMode: false})
+  fromArray.buf(arr)
     .on('data', data => {
       const res = result.shift()
       t.ok(Buffer.isBuffer(res), 'emit buffer') // redundant?

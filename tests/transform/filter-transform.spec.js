@@ -6,7 +6,7 @@ tape('[Filter] object stream', t => {
   t.plan(4)
 
   range(1, 5)
-    .pipe(filter({filter: n => n % 2})) // filter odd numbers
+    .pipe(filter({test: n => n % 2})) // filter odd numbers
     .on('data', data => {
       t.equal(data, result.shift(), `filtered odd numbers ${data}`)
     })
@@ -17,9 +17,7 @@ tape('[Filter] buffer stream', t => {
   t.plan(2)
   const source = Buffer.from('020801', 'hex')
   const result = ['02', '01'].map(str => Buffer.from(str, 'hex'))
-  fromBuffer(source, {highWaterMark: 1})
-    .pipe(filter({
-      filter: (buffer) => buffer[0] < 4
-    }))
+  fromBuffer.buf(source, {highWaterMark: 1})
+    .pipe(filter.buf((buffer) => buffer[0] < 4))
     .on('data', buffer => t.ok(buffer.equals(result.shift()), 'buffer stream filtered ' + buffer.toString('hex')))
 })

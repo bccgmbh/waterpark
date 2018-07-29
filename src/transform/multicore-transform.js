@@ -1,7 +1,7 @@
 const {fork} = require('child_process')
 const {concurrent} = require('./concurrent-transform')
 
-module.exports.multicore = (cores, path, options = {}) => {
+function multicoreTransform ({cores = 1, path, ...options} = {}) {
   const children = []
 
   for (let i = 0; i < cores; i++) {
@@ -9,8 +9,8 @@ module.exports.multicore = (cores, path, options = {}) => {
   }
 
   const transform = concurrent({
-    ...options,
     objectMode: true,
+    ...options,
     concurrency: cores,
     transform: function multicoreTransform (data, encoding, cb) {
       const idleChild = children.find((child) => !child.hasOwnProperty('cb'))
@@ -35,3 +35,19 @@ module.exports.multicore = (cores, path, options = {}) => {
 
   return transform
 }
+
+const multicore = (cores, path, options = {}) => {
+  if (typeof cores === 'number') {
+    return multicoreTransform({cores, path, ...options})
+  }
+  return multicoreTransform(cores)
+}
+
+multicore.buf = (cores, path, options = {}) => {
+  if (typeof cores === 'number') {
+    return multicoreTransform({...options, cores, path, objectMode: false})
+  }
+  return multicoreTransform({...cores, objectMode: false})
+}
+
+module.exports = {multicore}

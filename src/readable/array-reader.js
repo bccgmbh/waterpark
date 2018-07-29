@@ -22,7 +22,20 @@ class FromArrayReader extends Readable {
   }
 }
 
-module.exports = {
-  FromArrayReader,
-  fromArray: (arr, options) => new FromArrayReader(arr, options)
+// call signatures
+
+function fromArray (array, options = {}) {
+  if (Array.isArray(array)) {
+    return new FromArrayReader(array, {...options, objectMode: true})
+  }
+  return new FromArrayReader({...array, objectMode: true})
 }
+
+fromArray.buf = (array, options = {}) => {
+  if (Array.isArray(array)) {
+    return new FromArrayReader(array, {...options, objectMode: false})
+  }
+  return new FromArrayReader({...array, objectMode: false})
+}
+
+module.exports = {fromArray}
