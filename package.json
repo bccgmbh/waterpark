@@ -1,7 +1,7 @@
 {
   "name": "waterpark",
   "version": "0.2.0",
-  "description": "Stream toolbox - In development, call signatures will change!",
+  "description": "Stream toolbox - fun with streams",
   "main": "index.js",
   "scripts": {
     "test": "standard && DEBUG=* tape tests/*/*.spec.js | tap-spec"
@@ -12,6 +12,8 @@
   },
   "keywords": [
     "stream",
+    "pipe",
+    "concurrent",
     "through",
     "skip",
     "take",
@@ -23,7 +25,6 @@
     "random",
     "delay",
     "multicore",
-    "concurrent",
     "parallel",
     "readable",
     "writable",

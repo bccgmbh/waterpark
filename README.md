@@ -45,10 +45,10 @@ Waterpark streams default to objectMode (exception: `fromBuffer`).
 | [random](#random-options)          | R    | &#10003;    | &#10003;    | random (size, options)
 | [range](#range-options)            | R    | &#10003;    | &#10003;    | range (from, to, options)
 | [reduce](#reduce-options)          | R    | &#10003;    | &#8208;     | reduce (options, fn, initialValue, repeatAfter)
-| [slice](#slice)                    | T    | &#10003;    | &#10003;    | slice (begin, end, every, options)
-| [skip](#skip)                      | T    | &#10003;    | &#10003;    | skip (begin, every, options)
-| [take](#take)                      | T    | &#10003;    | &#10003;    | take (amount, every, options)
-| [through](#through)                | T    | &#10003;    | &#10003;    | through (fn, options)
+| [slice](#slice-options)            | T    | &#10003;    | &#10003;    | slice (begin, end, every, options)
+| [skip](#skip-options)              | T    | &#10003;    | &#10003;    | skip (begin, every, options)
+| [take](#take-options)              | T    | &#10003;    | &#10003;    | take (amount, every, options)
+| [through](#through-options)        | T    | &#10003;    | &#10003;    | through (fn, options)
 
 ## count (options)
 * `offset` <number> (default = 0) offset will be the first number emitted.
@@ -404,17 +404,14 @@ Expected output:
 
 
 ## skip (amount\[, every\]\[, options\])
-* `begin` <[Number]> zero based index at which to begin extraction.
+* `amount` <[Number]> skip this amount of objects / bytes.
 Default is 0
-* `end` <[Number]> pass elements up to but not including (zero based index).
-* `every` <[Number]> repeat slice operation after `every` elements.
+* `every` <[Number]> repeat skip operation after `every` elements.
+Default is infinity. `every` must be bigger than `amount`.
 * ...`options` <[TransformOptions]> optional stream options.
 * Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10003;
 
-Similar to
-[Array.slice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)
-and [Buffer.slice()](https://nodejs.org/api/buffer.html#buffer_buf_slice_start_end)
-**slice** is acting as range filter on its source.
+See also: [slice](#slice-options)
 
 In respect to streams potential infinite nature, the `every` parameter
 has been introduced.
@@ -424,7 +421,7 @@ Every 5 elements, pass the 2nd to the 4th element.
 ```javascript
 const {range, slice} = require('waterpark')
 range(0, 9)
-  .pipe(slice.obj(1, 4, 5))
+  .pipe(slice(1, 4, 5))
   .on('data', console.log)
 ```
 
@@ -438,7 +435,33 @@ Expected output:
     8
 
 ## take (amount\[, every\]\[, options\])
-// TODO: write docs
+* `amount` <[Number]> only take this amount of objects / bytes.
+Default is 0
+* `every` <[Number]> repeat take operation after `every` elements.
+Default is infinity, which will cause take to end after `amount` elements
+have been processed.
+* ...`options` <[TransformOptions]> optional stream options.
+* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10003;
+
+In respect to streams potential infinite nature, the `every` parameter
+has been introduced.
+
+See also: [slice](#slice-options)
+
+**Example**
+Take first 3 elements of a stream.
+```javascript
+const {count, take} = require('waterpark')
+count()
+  .pipe(take(3))
+  .on('data', console.log)
+```
+
+Expected output:
+
+    0
+    1
+    2
 
 ## through (\[options, \]fn(data, encoding, cb))
 // TODO: write docs
