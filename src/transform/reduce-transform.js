@@ -55,27 +55,37 @@ function reduceObject ({reducer, initialValue = 0, repeatAfter = Number.POSITIVE
  * If the total amount of objects is not a natural multiple of repeatAfter, the last result might behave unexpected.
  * @return {*}
  */
-function reduceBuffer ({reducer, initialValue = 0, repeatAfter = Number.POSITIVE_INFINITY, ...options} = {}) {
+function reduceBuffer ({reducer, initialValue, repeatAfter = Number.POSITIVE_INFINITY, ...options} = {}) {
   if (repeatAfter !== Number.POSITIVE_INFINITY &&
     (repeatAfter <= 0 || !Number.isInteger(repeatAfter))) {
     throw new Error('"repeatAfter" must be a Number')
   }
-  return new Transform({
+  if (repeatAfter !== Number.POSITIVE_INFINITY) {
+    throw new Error('Not yet implemented!')
+  }
+  let accumulator = initialValue || Buffer.alloc(0)
+  const stream = new Transform({
     objectMode: false,
     transform: (data, encoding, cb) => {
-      cb(new Error('Not yet implemented!'))
+      accumulator = reducer(accumulator, data)
+      cb()
+    },
+    flush (cb) {
+      this.push(accumulator)
+      cb()
     },
     ...options
   })
+  return stream
 }
 
 // --- Syntactic Sugar ---
 
-function reduce (options = {}, reducer, initialValue, repeatAfter) {
+function reduce (reducer, initialValue, repeatAfter, options = {}) {
   return reduceObject({...options, reducer, initialValue, repeatAfter})
 }
 
-reduce.buf = (options = {}, reducer, initialValue, repeatAfter) => {
+reduce.buf = (reducer, initialValue, repeatAfter, options = {}) => {
   return reduceBuffer({...options, reducer, initialValue, repeatAfter})
 }
 

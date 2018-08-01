@@ -44,7 +44,7 @@ Waterpark streams default to objectMode (exception: `fromBuffer`).
 | [multicore](#multicore-options)    | T    | &#10003;    | &#10003;    | multicore (cores, path, options)
 | [random](#random-options)          | R    | &#10003;    | &#10003;    | random (size, options)
 | [range](#range-options)            | R    | &#10003;    | &#10003;    | range (from, to, options)
-| [reduce](#reduce-options)          | R    | &#10003;    | &#8208;     | reduce (options, fn, initialValue, repeatAfter)
+| [reduce](#reduce-options)          | R    | &#10003;    | &#8208;     | reduce (reducer, initialValue, repeatAfter)
 | [slice](#slice-options)            | T    | &#10003;    | &#10003;    | slice (begin, end, every, options)
 | [skip](#skip-options)              | T    | &#10003;    | &#10003;    | skip (begin, every, options)
 | [take](#take-options)              | T    | &#10003;    | &#10003;    | take (amount, every, options)
@@ -369,9 +369,9 @@ Expected output:
 
 See: [skip](#skip-amount-every-options), [take](#take-amount-every-options)
 
-## reduce (options, fn\[, initalValue\]\[, every\])
+## reduce (reducer\[, initalValue\]\[, every\])
 * `options` <[TransformOptions]> optional stream options.
-* `fn` <Function (accumulator, currentValue, currentIndex)>
+* `reducer` <Function (accumulator, currentValue, currentIndex)>
   * `accumulator` <[any]> accumulates the callbacks return values.
   * `currentValue` <[any]> the current element being processed.
   * `currentIndex` <[Number]> zero based index of the current element.
@@ -389,7 +389,7 @@ Every 4 numbers emit the sum of the last 4 numbers.
 const {range, reduce} = require('waterpark')
 
 range.obj(1, 100)
-  .pipe({}, reduce.obj((sum, val) => sum + val, 0, 4))
+  .pipe(reduce.obj((sum, val) => sum + val, 0, 4))
   .on('data', console.log)
 ```
 
