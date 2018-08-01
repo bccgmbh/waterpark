@@ -19,10 +19,9 @@ module.exports = {
   ...require('./src/transform/splice-transform'),
   ...require('./src/transform/take-transform'),
   ...require('./src/transform/through-transform'),
-  ...require('./src/transform/rollingavg-transform'),
+  ...require('./src/transform/rollingavg-transform')
 
   // Writer
 
   // Duplex
-  ...require('./src/duplex/compose-duplex')
 }
