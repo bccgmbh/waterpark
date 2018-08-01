@@ -1,7 +1,7 @@
 const tape = require('tape')
 const {compose, range, through} = require('../../')
 
-tape('[Compose] compose 3 streams', t => {
+tape.skip('[Compose] compose 3 streams', t => {
   t.plan(11)
   const dx = compose(
     through({highWaterMark: 1}, (data, encoding, cb) => {
@@ -28,7 +28,7 @@ tape('[Compose] compose 3 streams', t => {
     .on('error', (err) => console.error(err))
 })
 
-tape('[Compose] compose 2 streams', t => {
+tape.skip('[Compose] compose 2 streams', t => {
   t.plan(11)
   const dx = compose(
     through((data, encoding, cb) => cb(null, data * 2)),
