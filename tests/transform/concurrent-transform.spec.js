@@ -66,6 +66,32 @@ tape('[Concurrent] object stream with error', t => {
     })
 })
 
+tape.only('[Concurrent] object stream with push', t => {
+  let result = [1, 2, 3, 4, 5, 6]
+  let count = 0
+  t.plan(7)
+
+  range(1, 3)
+    .pipe(concurrent({
+      concurrency: 2,
+      transform (n, encoding, next) {
+        this.push(n * 2 - 1)
+        this.push(n * 2)
+        next()
+      }
+    }))
+    .on('data', data => {
+      count++
+      t.equal(data, result.shift(), `data is passed concurrently ${data}`)
+    })
+    .on('error', err => {
+      t.fail('Error', err)
+    })
+    .on('end', () => {
+      t.equal(count, 6, `Counted ${count} data events`)
+    })
+})
+
 tape('[Concurrent] synchronous transformation', t => {
   let result = [1, 2, 3, 4, 5]
   t.plan(6)
