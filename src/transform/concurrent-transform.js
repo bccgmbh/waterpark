@@ -24,7 +24,8 @@ const concurrentTransform = ({concurrency = 1, transform, ...options}) => {
     transform (chunk, encoding, cb) {
       cbStack.push(cb)
       capacity--
-      transform.call(this, chunk, encoding, function (err, data) {
+
+      function next (err, data) {
         capacity++
         if (err) {
           this.emit('error', err)
@@ -33,7 +34,10 @@ const concurrentTransform = ({concurrency = 1, transform, ...options}) => {
         }
         if (data !== undefined) this.push(data)
         nextEventually(data)
-      })
+      }
+
+      const boundNext = next.bind(this)
+      transform.call(this, chunk, encoding, boundNext)
       nextEventually()
     },
     flush (cb) {

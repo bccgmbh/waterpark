@@ -61,12 +61,12 @@ tape('[Concurrent] object stream with error', t => {
     .on('error', err => {
       t.equal(err.message, 'foobar', 'propagates error')
     })
-    .on('end', () => {
+    .on('close', () => {
       t.equal(result.length, 2, `Concurrent stream should end on ${count}`)
     })
 })
 
-tape.only('[Concurrent] object stream with push', t => {
+tape('[Concurrent] object stream with push', t => {
   let result = [1, 2, 3, 4, 5, 6]
   let count = 0
   t.plan(7)
