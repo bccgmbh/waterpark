@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, concurrent, pause} = require('../../')
+const { range, concurrent, pause } = require('../../')
 
 tape('[Concurrent] stream-pauses', t => {
   t.plan(51)
@@ -11,7 +11,7 @@ tape('[Concurrent] stream-pauses', t => {
   let counter = 1
   range(1, 50)
     .pipe(stream)
-    .pipe(pause({interval: 10, duration: 100, target: stream}))
+    .pipe(pause({ interval: 10, duration: 100, target: stream }))
     .on('data', data => t.equal(data, counter, 'data arrived ' + counter++))
     .on('end', () => t.pass('end'))
     .on('error', err => t.fail(err))
@@ -117,11 +117,11 @@ tape('[Concurrent] schuffeled results', t => {
   // RESULT |     |  b  |  a  |  d  |  e  |  c  |
 
   let schedule = [
-    {data: 'a', delay: 2},
-    {data: 'b', delay: 1},
-    {data: 'c', delay: 4},
-    {data: 'd', delay: 1},
-    {data: 'e', delay: 1}
+    { data: 'a', delay: 2 },
+    { data: 'b', delay: 1 },
+    { data: 'c', delay: 4 },
+    { data: 'd', delay: 1 },
+    { data: 'e', delay: 1 }
   ]
   const result = 'badec'.split('')
   t.plan(6)
@@ -130,7 +130,7 @@ tape('[Concurrent] schuffeled results', t => {
     .pipe(concurrent({
       concurrency: 2,
       transform: function (index, encoding, cb) {
-        const {data, delay} = schedule[index]
+        const { data, delay } = schedule[index]
         setTimeout(() => cb(null, data), delay * 100)
       }
     }))

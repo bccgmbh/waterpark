@@ -1,4 +1,4 @@
-const {Transform} = require('stream')
+const { Transform } = require('stream')
 
 function through (options, callback) {
   [options, callback] = normalizeCallSignature(options, callback)

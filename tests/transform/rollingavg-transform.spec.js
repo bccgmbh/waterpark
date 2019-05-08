@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, skip, rollingAvg} = require('../../')
+const { range, skip, rollingAvg } = require('../../')
 
 tape('[Rolling] average for last 3 values', t => {
   const results = [5, 7]

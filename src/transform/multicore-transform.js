@@ -1,7 +1,7 @@
-const {fork} = require('child_process')
-const {concurrent} = require('./concurrent-transform')
+const { fork } = require('child_process')
+const { concurrent } = require('./concurrent-transform')
 
-function multicoreTransform ({cores = 1, path, ...options} = {}) {
+function multicoreTransform ({ cores = 1, path, ...options } = {}) {
   const children = []
 
   for (let i = 0; i < cores; i++) {
@@ -38,16 +38,16 @@ function multicoreTransform ({cores = 1, path, ...options} = {}) {
 
 const multicore = (cores, path, options = {}) => {
   if (typeof cores === 'number') {
-    return multicoreTransform({cores, path, ...options})
+    return multicoreTransform({ cores, path, ...options })
   }
   return multicoreTransform(cores)
 }
 
 multicore.buf = (cores, path, options = {}) => {
   if (typeof cores === 'number') {
-    return multicoreTransform({...options, cores, path, objectMode: false})
+    return multicoreTransform({ ...options, cores, path, objectMode: false })
   }
-  return multicoreTransform({...cores, objectMode: false})
+  return multicoreTransform({ ...cores, objectMode: false })
 }
 
-module.exports = {multicore}
+module.exports = { multicore }

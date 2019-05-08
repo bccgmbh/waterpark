@@ -1,6 +1,6 @@
-const {Transform} = require('stream')
+const { Transform } = require('stream')
 
-function filterTransform ({test, ...options}) {
+function filterTransform ({ test, ...options }) {
   return new Transform({
     objectMode: true,
     ...options,
@@ -17,16 +17,16 @@ function filterTransform ({test, ...options}) {
 
 const filter = (test, options = {}) => {
   if (typeof test === 'function') {
-    return filterTransform({test, ...options})
+    return filterTransform({ test, ...options })
   }
   return filterTransform(test)
 }
 
 filter.buf = (test, options) => {
   if (typeof test === 'function') {
-    return filterTransform({test, ...options, objectMode: false})
+    return filterTransform({ test, ...options, objectMode: false })
   }
-  return filterTransform({...test, objectMode: false})
+  return filterTransform({ ...test, objectMode: false })
 }
 
-module.exports = {filter}
+module.exports = { filter }

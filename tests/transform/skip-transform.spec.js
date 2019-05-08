@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, skip, fromBuffer} = require('../../')
+const { range, skip, fromBuffer } = require('../../')
 
 tape('[Skip] object stream', t => {
   const result = [4, 5]
@@ -57,7 +57,7 @@ tape('[Skip] buffer stream', t => {
 tape('[Skip] buffer stream with low water mark', t => {
   const results = ['d', 'ef']
   t.plan(3)
-  fromBuffer.buf(Buffer.from('abcdef'), {highWaterMark: 2})
+  fromBuffer.buf(Buffer.from('abcdef'), { highWaterMark: 2 })
     .pipe(skip.buf(3))
     .on('data', data => {
       t.equal(data.toString(), results.shift(), `3 bytes skipped`)

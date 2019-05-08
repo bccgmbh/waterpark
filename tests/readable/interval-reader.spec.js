@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {interval, take} = require('../../')
+const { interval, take } = require('../../')
 
 tape('[IntervalReader] interval(100).pipe(take(3)) should porperly terminate around 300ms', t => {
   t.plan(4)

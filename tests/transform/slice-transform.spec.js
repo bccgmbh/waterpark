@@ -1,6 +1,6 @@
 const tape = require('tape')
-const {range, random, slice} = require('../../')
-const {PassThrough} = require('stream')
+const { range, random, slice } = require('../../')
+const { PassThrough } = require('stream')
 
 tape('[Slice] invariant objects', t => {
   const result = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -10,7 +10,7 @@ tape('[Slice] invariant objects', t => {
 tape('[Slice] skip 5 objects', t => {
   const result = [5, 6, 7, 8, 9]
   range(0, 9)
-    .pipe(slice({begin: 5}))
+    .pipe(slice({ begin: 5 }))
     .on('data', data => {
       t.equal(data, result.shift(), `sliced data passed ${data}`)
     })
@@ -20,7 +20,7 @@ tape('[Slice] skip 5 objects', t => {
 tape('[Slice] take 3 objects', t => {
   const result = [0, 1, 2]
   range(0, 9)
-    .pipe(slice({end: 3}))
+    .pipe(slice({ end: 3 }))
     .on('data', data => {
       t.equal(data, result.shift(), `sliced data passed ${data}`)
     })
@@ -53,7 +53,7 @@ tape('Slice invariant bytes', t => {
 })
 
 tape('[Slice] skip 3', t => {
-  deepCheckScenarios(t, {begin: 3}, [{
+  deepCheckScenarios(t, { begin: 3 }, [{
     name: 'skip 3 bytes form single buffer',
     provided: ['0123456789'],
     expected: ['3456789']
@@ -65,7 +65,7 @@ tape('[Slice] skip 3', t => {
 })
 
 tape('[Slice] take 3 bytes', t => {
-  deepCheckScenarios(t, {end: 3}, [{
+  deepCheckScenarios(t, { end: 3 }, [{
     name: 'single buffer',
     provided: ['0123456789'],
     expected: ['012']
@@ -77,7 +77,7 @@ tape('[Slice] take 3 bytes', t => {
 })
 
 tape('[Slice] skip 5 bytes then take 2 bytes', t => {
-  deepCheckScenarios(t, {begin: 3, end: 5}, [{
+  deepCheckScenarios(t, { begin: 3, end: 5 }, [{
     name: 'single buffer',
     provided: ['0123456789'],
     expected: ['34']
@@ -89,7 +89,7 @@ tape('[Slice] skip 5 bytes then take 2 bytes', t => {
 })
 
 tape('[Slice] skip 2 bytes every 5 bytes', t => {
-  deepCheckScenarios(t, {begin: 2, end: 4, every: 5}, [{
+  deepCheckScenarios(t, { begin: 2, end: 4, every: 5 }, [{
     name: 'single buffer',
     provided: ['0123456789'],
     expected: ['23', '78']
@@ -102,8 +102,8 @@ tape('[Slice] skip 2 bytes every 5 bytes', t => {
 
 tape('[Slice] slice finite sequence from continuous stream', t => {
   t.plan(6)
-  random.buf({highWaterMark: 4}) // emits buffers of length 4
-    .pipe(slice.buf({begin: 2, end: 18}))
+  random.buf({ highWaterMark: 4 }) // emits buffers of length 4
+    .pipe(slice.buf({ begin: 2, end: 18 }))
     .on('data', data => t.ok(Buffer.isBuffer(data), 'emits buffer'))
     .on('end', () => t.pass('Stream ends after slice'))
 })

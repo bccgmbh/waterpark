@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {multicore, range} = require('../../')
+const { multicore, range } = require('../../')
 const worker = require.resolve('./multicore-sub.js')
 
 module.exports = (cores) => {

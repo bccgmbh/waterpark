@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {fromArray} = require('../../')
+const { fromArray } = require('../../')
 
 tape('[ArrayReader] reads elements from array', t => {
   const result = [1, 2, 3]

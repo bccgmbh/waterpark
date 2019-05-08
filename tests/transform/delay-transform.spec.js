@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, take, delay, random} = require('../../')
+const { range, take, delay, random } = require('../../')
 
 // const DEFAULT_HIGH_WATERMARK = 16384
 
@@ -26,7 +26,7 @@ tape('[Delay] an object stream', t => {
 
 tape('[Delay] buffer stream', t => {
   t.plan(5)
-  random.buf({highWaterMark: 10})
+  random.buf({ highWaterMark: 10 })
     .pipe(take.buf(40))
     .pipe(delay.buf(100, 0))
     .on('data', buffer => {

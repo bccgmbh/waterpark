@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {count, take} = require('../..')
+const { count, take } = require('../..')
 
 tape('count in object mode', t => {
   t.plan(100 + 1)

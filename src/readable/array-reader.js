@@ -1,4 +1,4 @@
-const {Readable} = require('stream')
+const { Readable } = require('stream')
 
 /**
  * Object stream of elements form an array
@@ -6,7 +6,7 @@ const {Readable} = require('stream')
 class FromArrayReader extends Readable {
   constructor (arr, options = {}) {
     if (!Array.isArray(arr)) throw new TypeError('Expecting Array')
-    super(Object.assign({objectMode: true}, options))
+    super(Object.assign({ objectMode: true }, options))
     this.arr = arr.reverse()
   }
 
@@ -26,16 +26,16 @@ class FromArrayReader extends Readable {
 
 function fromArray (array, options = {}) {
   if (Array.isArray(array)) {
-    return new FromArrayReader(array, {...options, objectMode: true})
+    return new FromArrayReader(array, { ...options, objectMode: true })
   }
-  return new FromArrayReader({...array, objectMode: true})
+  return new FromArrayReader({ ...array, objectMode: true })
 }
 
 fromArray.buf = (array, options = {}) => {
   if (Array.isArray(array)) {
-    return new FromArrayReader(array, {...options, objectMode: false})
+    return new FromArrayReader(array, { ...options, objectMode: false })
   }
-  return new FromArrayReader({...array, objectMode: false})
+  return new FromArrayReader({ ...array, objectMode: false })
 }
 
-module.exports = {fromArray}
+module.exports = { fromArray }

@@ -1,4 +1,4 @@
-const {Transform} = require('stream')
+const { Transform } = require('stream')
 
 /**
  * Like Array.reduce() but for object streams
@@ -10,7 +10,7 @@ const {Transform} = require('stream')
  * If the total amount of objects is not a natural multiple of repeatAfter, the last result might behave unexpected.
  * @return {*}
  */
-function reduceObject ({reducer, initialValue = 0, repeatAfter = Number.POSITIVE_INFINITY, ...options} = {}) {
+function reduceObject ({ reducer, initialValue = 0, repeatAfter = Number.POSITIVE_INFINITY, ...options } = {}) {
   if (repeatAfter !== Number.POSITIVE_INFINITY &&
     (repeatAfter <= 0 || !Number.isInteger(repeatAfter))) {
     throw new Error('"repeatAfter" must be a Number')
@@ -55,7 +55,7 @@ function reduceObject ({reducer, initialValue = 0, repeatAfter = Number.POSITIVE
  * If the total amount of objects is not a natural multiple of repeatAfter, the last result might behave unexpected.
  * @return {*}
  */
-function reduceBuffer ({reducer, initialValue, repeatAfter = Number.POSITIVE_INFINITY, ...options} = {}) {
+function reduceBuffer ({ reducer, initialValue, repeatAfter = Number.POSITIVE_INFINITY, ...options } = {}) {
   if (repeatAfter !== Number.POSITIVE_INFINITY &&
     (repeatAfter <= 0 || !Number.isInteger(repeatAfter))) {
     throw new Error('"repeatAfter" must be a Number')
@@ -82,11 +82,11 @@ function reduceBuffer ({reducer, initialValue, repeatAfter = Number.POSITIVE_INF
 // --- Syntactic Sugar ---
 
 function reduce (reducer, initialValue, repeatAfter, options = {}) {
-  return reduceObject({...options, reducer, initialValue, repeatAfter})
+  return reduceObject({ ...options, reducer, initialValue, repeatAfter })
 }
 
 reduce.buf = (reducer, initialValue, repeatAfter, options = {}) => {
-  return reduceBuffer({...options, reducer, initialValue, repeatAfter})
+  return reduceBuffer({ ...options, reducer, initialValue, repeatAfter })
 }
 
-module.exports = {reduce}
+module.exports = { reduce }

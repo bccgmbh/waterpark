@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, take, through, random} = require('../../')
+const { range, take, through, random } = require('../../')
 
 // const DEFAULT_HIGH_WATERMARK = 16384
 
@@ -18,7 +18,7 @@ tape('[Through] object stream', t => {
 tape('[Through] buffer stream', t => {
   t.plan(4)
   const highWaterMark = 10
-  random.buf({highWaterMark})
+  random.buf({ highWaterMark })
     .pipe(through.buf((data, encoding, cb) => {
       cb(null, data)
     }))

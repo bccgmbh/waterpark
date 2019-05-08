@@ -1,12 +1,12 @@
-const {Readable} = require('stream')
+const { Readable } = require('stream')
 
 /**
  * Creates a finite stream of integer numbers.
  * ObjectMode will be set to true.
  */
 class RangeReader extends Readable {
-  constructor ({from = 0, to = Number.POSITIVE_INFINITY, objectMode = true, ...options} = {}) {
-    super({objectMode, ...options})
+  constructor ({ from = 0, to = Number.POSITIVE_INFINITY, objectMode = true, ...options } = {}) {
+    super({ objectMode, ...options })
     this.current = from
     // direction aware step and break condition
     this.step = (from <= to)
@@ -28,14 +28,14 @@ function range (from, to, options) {
   if (typeof from === 'object') {
     return new RangeReader(from)
   }
-  return new RangeReader({from, to, ...options})
+  return new RangeReader({ from, to, ...options })
 }
 
 range.buf = (from, to, options) => {
   if (typeof from === 'object') {
-    return new RangeReader({...from, objectMode: false})
+    return new RangeReader({ ...from, objectMode: false })
   }
-  return new RangeReader({from, to, ...options, objectMode: false})
+  return new RangeReader({ from, to, ...options, objectMode: false })
 }
 
 range.BUFFER_SIZE = 6

@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, fromBuffer, take} = require('../../')
+const { range, fromBuffer, take } = require('../../')
 
 tape('[Take] object stream', t => {
   const result = [1, 2, 3]

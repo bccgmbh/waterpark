@@ -1,4 +1,4 @@
-const {Writable} = require('stream')
+const { Writable } = require('stream')
 
 class ConsoleWriter extends Writable {
   constructor (options = {}) {

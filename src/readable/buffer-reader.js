@@ -1,4 +1,4 @@
-const {Readable} = require('stream')
+const { Readable } = require('stream')
 
 /**
  * Buffer stream from a buffer
@@ -25,16 +25,16 @@ class FromBufferReader extends Readable {
 
 function fromBuffer (buf, options = {}) {
   if (Buffer.isBuffer(buf)) {
-    return new FromBufferReader(buf, {...options, objectMode: true})
+    return new FromBufferReader(buf, { ...options, objectMode: true })
   }
-  return new FromBufferReader({...buf, objectMode: true})
+  return new FromBufferReader({ ...buf, objectMode: true })
 }
 
 fromBuffer.buf = (buf, options = {}) => {
   if (Buffer.isBuffer(buf)) {
-    return new FromBufferReader(buf, {...options, objectMode: false})
+    return new FromBufferReader(buf, { ...options, objectMode: false })
   }
-  return new FromBufferReader({...buf, objectMode: false})
+  return new FromBufferReader({ ...buf, objectMode: false })
 }
 
-module.exports = {fromBuffer}
+module.exports = { fromBuffer }

@@ -1,6 +1,6 @@
-const {Transform} = require('stream')
+const { Transform } = require('stream')
 
-const concurrentTransform = ({concurrency = 1, transform, ...options}) => {
+const concurrentTransform = ({ concurrency = 1, transform, ...options }) => {
   let capacity = concurrency
   let flushCb // flush callback
   const cbStack = []
@@ -51,16 +51,16 @@ const concurrentTransform = ({concurrency = 1, transform, ...options}) => {
 
 function concurrent (concurrency, transform, options = {}) {
   if (typeof concurrency === 'number') {
-    return concurrentTransform({concurrency, transform, ...options})
+    return concurrentTransform({ concurrency, transform, ...options })
   }
   return concurrentTransform(concurrency)
 }
 
 concurrent.buf = (concurrency, transform, options = {}) => {
   if (typeof concurrency === 'number') {
-    return concurrentTransform({concurrency, transform, ...options, objectMode: false})
+    return concurrentTransform({ concurrency, transform, ...options, objectMode: false })
   }
-  return concurrentTransform({...concurrency, objectMode: false})
+  return concurrentTransform({ ...concurrency, objectMode: false })
 }
 
-module.exports = {concurrent}
+module.exports = { concurrent }

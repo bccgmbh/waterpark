@@ -1,6 +1,6 @@
 const Transform = require('stream')
 
-function spliceObjects ({start, skip, insert, every, ...options} = {}) {
+function spliceObjects ({ start, skip, insert, every, ...options } = {}) {
   return new Transform({
     ...options,
     objectMode: true,
@@ -12,9 +12,9 @@ function spliceObjects ({start, skip, insert, every, ...options} = {}) {
 
 function splice (start, skip, insert, every, options) {
   if (typeof start === 'number') {
-    return spliceObjects({start, skip, insert, every, ...options})
+    return spliceObjects({ start, skip, insert, every, ...options })
   }
   return spliceObjects(start)
 }
 
-module.exports = {splice}
+module.exports = { splice }

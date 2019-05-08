@@ -1,4 +1,4 @@
-const {createHash} = require('crypto')
+const { createHash } = require('crypto')
 
 process.on('message', (msg) => {
   for (let i = 1e5; i > 0; i--) {

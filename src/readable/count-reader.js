@@ -1,6 +1,6 @@
-const {Readable} = require('stream')
+const { Readable } = require('stream')
 
-function countObjectReader ({offset = 0, ...options} = {}) {
+function countObjectReader ({ offset = 0, ...options } = {}) {
   return new Readable({
     ...options,
     objectMode: true,
@@ -16,7 +16,7 @@ function countObjectReader ({offset = 0, ...options} = {}) {
  * @param offset {number} between -2147483647 and 2147483647
  * @param options
  */
-function countBufferReader ({offset = 0, ...options} = {}) {
+function countBufferReader ({ offset = 0, ...options } = {}) {
   return new Readable({
     ...options,
     objectMode: false,
@@ -32,16 +32,16 @@ function countBufferReader ({offset = 0, ...options} = {}) {
 
 const count = (offset, options = {}) => {
   if (typeof offset === 'number') {
-    return countObjectReader({offset, options})
+    return countObjectReader({ offset, options })
   }
   return countObjectReader(offset)
 }
 
 count.buf = (offset, options = {}) => {
   if (typeof offset === 'number') {
-    return countBufferReader({offset, ...options, objectMode: true})
+    return countBufferReader({ offset, ...options, objectMode: true })
   }
-  return countObjectReader({...offset, objectMode: true})
+  return countObjectReader({ ...offset, objectMode: true })
 }
 
-module.exports = {count}
+module.exports = { count }

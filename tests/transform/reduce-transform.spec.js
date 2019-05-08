@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range, fromBuffer, reduce} = require('../../')
+const { range, fromBuffer, reduce } = require('../../')
 
 tape('[Reduce] object stream', t => {
   t.plan(2) // 2 = 1 x reduce + 1 x END
@@ -47,7 +47,7 @@ tape('[Reduce] buffer stream', t => {
 tape('[Reduce] concat segmented buffer stream', t => {
   t.plan(2) // 2 = 1 x reduce + 1 x END
   const expected = Buffer.from('123456')
-  fromBuffer.buf(expected, {highWaterMark: 2})
+  fromBuffer.buf(expected, { highWaterMark: 2 })
     // emitting 3x buffer of length 2
     .pipe(reduce.buf((acc, val) => Buffer.concat([acc, val])))
     .on('data', data => {

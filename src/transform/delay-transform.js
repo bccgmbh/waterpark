@@ -1,4 +1,4 @@
-const {Transform} = require('stream')
+const { Transform } = require('stream')
 
 class DelayTransform extends Transform {
   constructor (millis, jitter = 0, options = {}) {
@@ -18,16 +18,16 @@ class DelayTransform extends Transform {
 
 function delay (milliseconds, jitter, options = {}) {
   if (typeof milliseconds === 'number') {
-    return new DelayTransform(milliseconds, jitter, {...options, objectMode: true})
+    return new DelayTransform(milliseconds, jitter, { ...options, objectMode: true })
   }
-  return new DelayTransform({...milliseconds, objectMode: true})
+  return new DelayTransform({ ...milliseconds, objectMode: true })
 }
 
 delay.buf = (milliseconds, jitter, options = {}) => {
   if (typeof milliseconds === 'number') {
-    return new DelayTransform(milliseconds, jitter, {...options, objectMode: false})
+    return new DelayTransform(milliseconds, jitter, { ...options, objectMode: false })
   }
-  return new DelayTransform({...milliseconds, objectMode: false})
+  return new DelayTransform({ ...milliseconds, objectMode: false })
 }
 
-module.exports = {delay}
+module.exports = { delay }

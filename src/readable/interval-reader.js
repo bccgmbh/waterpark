@@ -1,4 +1,4 @@
-const {Readable} = require('stream')
+const { Readable } = require('stream')
 
 class IntervalReader extends Readable {
   constructor (interval, options = {}) {
@@ -26,9 +26,9 @@ const interval = (milliseconds, options = {}) => {
 
 interval.buf = (milliseconds, options = {}) => {
   if (typeof milliseconds === 'number') {
-    return new IntervalReader(milliseconds, {...options, objectMode: false})
+    return new IntervalReader(milliseconds, { ...options, objectMode: false })
   }
-  return new IntervalReader({...milliseconds, objectMode: false})
+  return new IntervalReader({ ...milliseconds, objectMode: false })
 }
 
-module.exports = {interval}
+module.exports = { interval }

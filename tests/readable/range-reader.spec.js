@@ -1,5 +1,5 @@
 const tape = require('tape')
-const {range} = require('../../')
+const { range } = require('../../')
 
 tape('[RangeReader] Finite range stream (default) emitting numbers', t => {
   const MAX_COUNT = 4

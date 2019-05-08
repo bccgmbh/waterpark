@@ -1,4 +1,4 @@
-const {Transform} = require('stream')
+const { Transform } = require('stream')
 
 module.exports.rollingAvg = (length, options) => {
   let history = []

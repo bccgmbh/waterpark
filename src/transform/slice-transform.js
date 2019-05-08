@@ -1,4 +1,4 @@
-const {Transform} = require('stream')
+const { Transform } = require('stream')
 
 // Buffer Mode
 
@@ -13,7 +13,7 @@ const {Transform} = require('stream')
 // ignore: x
 // stream: +
 
-function sliceBuffer ({begin, end, every, ...options} = {}) {
+function sliceBuffer ({ begin, end, every, ...options } = {}) {
   if (options.objectMode) return slice.obj(...arguments)
   begin = begin || 0
   end = end || Number.POSITIVE_INFINITY
@@ -50,7 +50,7 @@ function sliceBuffer ({begin, end, every, ...options} = {}) {
 
 // Object Mode
 
-function sliceObject ({begin, end, every, ...options} = {}) {
+function sliceObject ({ begin, end, every, ...options } = {}) {
   options.objectMode = true
   begin = begin || 0
   end = end || Number.POSITIVE_INFINITY
@@ -79,16 +79,16 @@ function sliceObject ({begin, end, every, ...options} = {}) {
 
 function slice (begin, end, every, options = {}) {
   if (typeof begin === 'number') {
-    return sliceObject({begin, end, every, ...options})
+    return sliceObject({ begin, end, every, ...options })
   }
   return sliceObject(begin)
 }
 
 slice.buf = (begin, end, every, options = {}) => {
   if (typeof begin === 'number') {
-    return sliceBuffer({begin, end, every, ...options})
+    return sliceBuffer({ begin, end, every, ...options })
   }
   return sliceBuffer(begin)
 }
 
-module.exports = {slice}
+module.exports = { slice }

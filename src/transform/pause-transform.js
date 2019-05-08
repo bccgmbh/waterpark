@@ -1,6 +1,6 @@
-const {Transform} = require('stream')
+const { Transform } = require('stream')
 
-function pauseObjectTransform ({interval, duration, target, ...options} = {}) {
+function pauseObjectTransform ({ interval, duration, target, ...options } = {}) {
   if (interval < 1 || !Number.isInteger(interval)) {
     throw new Error('interval must be a positive integer')
   }
@@ -28,22 +28,22 @@ function pauseObjectTransform ({interval, duration, target, ...options} = {}) {
   return self
 }
 
-function pauseBufferTransform ({interval, duration, target, ...options} = {}) {
+function pauseBufferTransform ({ interval, duration, target, ...options } = {}) {
   throw new Error('NYI!')
 }
 
 const pause = (interval, duration, target, options = {}) => {
   if (typeof interval === 'number') {
-    return pauseObjectTransform({interval, duration, target, ...options})
+    return pauseObjectTransform({ interval, duration, target, ...options })
   }
   return pauseObjectTransform(interval)
 }
 
 pause.buf = (interval, duration, target, options = {}) => {
   if (typeof interval === 'number') {
-    return pauseBufferTransform({interval, duration, target, ...options})
+    return pauseBufferTransform({ interval, duration, target, ...options })
   }
   return pauseBufferTransform(interval)
 }
 
-module.exports = {pause}
+module.exports = { pause }

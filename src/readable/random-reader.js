@@ -1,9 +1,9 @@
-const {Readable} = require('stream')
+const { Readable } = require('stream')
 const crypto = require('crypto')
 
 // STREAMS
 
-function randomObjectReader ({size = 16, ...options} = {}) {
+function randomObjectReader ({ size = 16, ...options } = {}) {
   const length = Math.ceil(size / 2)
   return new Readable({
     ...options,
@@ -32,7 +32,7 @@ function randomBufferReader (options) {
 
 function random (size, options = {}) {
   if (typeof size === 'number') {
-    return randomObjectReader({size, ...options})
+    return randomObjectReader({ size, ...options })
   }
   return randomObjectReader(size)
 }
@@ -44,4 +44,4 @@ random.buf = (size, options = {}) => {
   return randomBufferReader(size)
 }
 
-module.exports = {random}
+module.exports = { random }
