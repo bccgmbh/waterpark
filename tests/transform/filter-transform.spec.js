@@ -2,7 +2,7 @@ const tape = require('tape')
 const { range, fromBuffer, filter } = require('../../')
 
 tape('[Filter] object stream', t => {
-  let result = [1, 3, 5]
+  const result = [1, 3, 5]
   t.plan(4)
 
   range(1, 5)

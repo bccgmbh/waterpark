@@ -1,7 +1,7 @@
 const { Transform } = require('stream')
 
 module.exports.rollingAvg = (length, options) => {
-  let history = []
+  const history = []
   let avg = 0
   let sum = 0
   return new Transform({

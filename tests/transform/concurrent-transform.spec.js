@@ -18,7 +18,7 @@ tape('[Concurrent] stream-pauses', t => {
 })
 
 tape('[Concurrent] object stream', t => {
-  let result = [1, 2, 3, 4, 5, 6, 7, 8]
+  const result = [1, 2, 3, 4, 5, 6, 7, 8]
   const count = result.length
   t.plan(count + 1)
 
@@ -38,7 +38,7 @@ tape('[Concurrent] object stream', t => {
 })
 
 tape('[Concurrent] object stream with error', t => {
-  let result = [1, 2, 3]
+  const result = [1, 2, 3]
   let count = 0
   t.plan(3)
 
@@ -67,7 +67,7 @@ tape('[Concurrent] object stream with error', t => {
 })
 
 tape('[Concurrent] object stream with push', t => {
-  let result = [1, 2, 3, 4, 5, 6]
+  const result = [1, 2, 3, 4, 5, 6]
   let count = 0
   t.plan(7)
 
@@ -93,7 +93,7 @@ tape('[Concurrent] object stream with push', t => {
 })
 
 tape('[Concurrent] synchronous transformation', t => {
-  let result = [1, 2, 3, 4, 5]
+  const result = [1, 2, 3, 4, 5]
   t.plan(6)
 
   range(1, 5)
@@ -116,7 +116,7 @@ tape('[Concurrent] schuffeled results', t => {
   // -------+-----+-----+-----+-----+-----+------
   // RESULT |     |  b  |  a  |  d  |  e  |  c  |
 
-  let schedule = [
+  const schedule = [
     { data: 'a', delay: 2 },
     { data: 'b', delay: 1 },
     { data: 'c', delay: 4 },

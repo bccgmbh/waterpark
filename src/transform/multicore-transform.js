@@ -13,7 +13,7 @@ function multicoreTransform ({ cores = 1, path, ...options } = {}) {
     ...options,
     concurrency: cores,
     transform: function multicoreTransform (data, encoding, cb) {
-      const idleChild = children.find((child) => !child.hasOwnProperty('cb'))
+      const idleChild = children.find((child) => !Object.prototype.hasOwnProperty.call(child, 'cb'))
       if (!idleChild) throw new Error('No idle idleChild available!')
       idleChild.cb = cb
       idleChild.send(data)

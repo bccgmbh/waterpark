@@ -4,7 +4,8 @@
   "description": "Stream toolbox - fun with streams",
   "main": "index.js",
   "scripts": {
-    "test": "standard && DEBUG=* tape tests/*/*.spec.js | tap-spec"
+    "test": "standard && DEBUG=* tape tests/*/*.spec.js | tap-spec",
+    "fix": "standard --fix"
   },
   "repository": {
     "type": "git",
@@ -37,9 +38,9 @@
   },
   "homepage": "https://github.com/bccgmbh/waterpark#readme",
   "devDependencies": {
-    "standard": "^12.0.1",
+    "standard": "^13.1.0",
     "tap-spec": "^5.0.0",
-    "tape": "^4.10.1"
+    "tape": "^4.11.0"
   },
   "dependencies": {}
 }
