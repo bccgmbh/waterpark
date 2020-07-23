@@ -27,14 +27,14 @@ function fromBuffer (buf, options = {}) {
   if (Buffer.isBuffer(buf)) {
     return new FromBufferReader(buf, { ...options, objectMode: true })
   }
-  return new FromBufferReader({ ...buf, objectMode: true })
+  throw new Error('First parameter must be a Buffer!')
 }
 
 fromBuffer.buf = (buf, options = {}) => {
   if (Buffer.isBuffer(buf)) {
     return new FromBufferReader(buf, { ...options, objectMode: false })
   }
-  return new FromBufferReader({ ...buf, objectMode: false })
+  throw new Error('First parameter must be a Buffer!')
 }
 
 module.exports = { fromBuffer }

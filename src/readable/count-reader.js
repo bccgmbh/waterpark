@@ -11,7 +11,7 @@ function countObjectReader ({ offset = 0, ...options } = {}) {
 }
 
 /**
- * counts Int32 big endian buffer in positive direction.
+ * counts Int48 big endian buffer in positive direction.
  * Attention: after 2147483647 it will jump back to -2147483647
  * @param offset {number} between -2147483647 and 2147483647
  * @param options

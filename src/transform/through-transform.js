@@ -13,6 +13,12 @@ through.buf = (options, callback) => {
   return new Transform(options)
 }
 
+through.sync = (options, callback) => {
+  [options, callback] = normalizeCallSignature(options, callback)
+  options.transform = (data, enc, next) => next(null, callback(data))
+  return new Transform(options)
+}
+
 /**
  * Make sure that options.readableObjectMode is compatible with promiseFactory call signature
  * Make sure that options.writableObjectMode is compatible with promise outcome (both resolve and fail)

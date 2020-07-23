@@ -42,7 +42,7 @@ tape('[ArrayReader] with empty array', t => {
 })
 
 tape('[ArrayReader] complains for not providing an array', t => {
-  t.throws(() => fromArray('not an array'), 'Throws exception if no array has been provided')
+  t.throws(() => fromArray({ foo: 'bar' }), 'Throws exception if no array has been provided')
   t.throws(() => fromArray(), 'Throws exception if no array has been provided')
   t.end()
 })

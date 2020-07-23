@@ -464,7 +464,44 @@ Expected output:
     2
 
 ## through (\[options, \]fn(data, encoding, cb))
-// TODO: write docs
+* `options` <[TransformOptions]> optional stream options.
+* `fn` <[Function]> transform function
+* Returns: <[Transform]> supporting object mode &#10003; | buffer mode &#10003;
+
+A quick way to define a transform stream.
+
+**Example (synchronous transformation)**
+```js
+const {through, range} = require('waterpark')
+range(1, 3)
+  .pipe(through.sync(x => x * 2))
+  .on('data', console.log)
+```
+
+Expected output:
+
+    2
+    4
+    6
+
+**Example (async transformation)**
+```js
+const {through, range} = require('waterpark')
+range(1, 3)
+  .pipe(through((data, encoding, cb) => {
+    doSomethingAsync(data, cb)
+  }))
+  .on('data', console.log)
+```
+
+**Example (promise transformation)**
+```js
+const {through, range} = require('waterpark')
+range(1, 3)
+  .pipe(through.promise(myPromiseFactory)
+  .on('data', console.log)
+```
+
 
 [any]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures
 [Number]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type
