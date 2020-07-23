@@ -1,6 +1,6 @@
 {
   "name": "waterpark",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Stream toolbox - fun with streams",
   "main": "index.js",
   "scripts": {
